@@ -1,0 +1,234 @@
+using UnityEngine;
+using System.Collections.Generic;
+namespace DvergrAllies
+{
+    /// <summary>
+    /// Runtime component that forces ally Dvergrs to actually fight instead of flee.
+    /// The vanilla Dverger is a neutral NPC with aggravatable/passive AI flags.
+    /// This component overrides those at runtime after all vanilla systems have initialized.
+    /// </summary>
+    public class DvergrCombatAI : MonoBehaviour
+    {
+        public bool IsMeleeClass = false;
+        public bool IsRangedClass = false;
+        public bool IsClericClass = false;
+        public bool IsElementalMage = false;
+        
+        private MonsterAI m_monsterAI;
+        private bool m_initialized = false;
+        private float m_clericHealTimer = 15f; // Start off cooldown
+
+        private void Awake()
+        {
+            m_monsterAI = GetComponent<MonsterAI>();
+        }
+
+        private void Start()
+        {
+            ForceAggressiveAI();
+            Invoke(nameof(ForceAggressiveAI), 1f);
+            Invoke(nameof(ForceAggressiveAI), 3f);
+        }
+
+        private void ForceAggressiveAI()
+        {
+            if (m_monsterAI == null) return;
+
+            // Universal flags for ALL allies
+            m_monsterAI.m_aggravatable = false;
+            m_monsterAI.m_passiveAggresive = false;
+            m_monsterAI.m_fleeIfNotAlerted = false;
+            m_monsterAI.m_avoidFire = false;
+            m_monsterAI.m_avoidWater = false;
+            m_monsterAI.m_fleeIfLowHealth = 0f;
+            m_monsterAI.m_attackPlayerObjects = false;
+
+            // Behavior-specific overrides
+            if (IsMeleeClass)
+            {
+                // Full charge, never circle, no random wandering during combat
+                m_monsterAI.m_circulateWhileCharging = false;
+                m_monsterAI.m_circulateWhileChargingFlying = false;
+                m_monsterAI.m_randomMoveInterval = 0f;
+                m_monsterAI.m_randomCircleInterval = 0f;
+                m_monsterAI.m_interceptTimeMax = 0f;
+                m_monsterAI.m_interceptTimeMin = 0f;
+                m_monsterAI.m_maxChaseDistance = 0f;
+                m_monsterAI.m_alertRange = 30f;
+            }
+            else if (IsRangedClass)
+            {
+                // Stand ground and shoot, don't circle like a chicken
+                m_monsterAI.m_circulateWhileCharging = false;
+                m_monsterAI.m_circulateWhileChargingFlying = false;
+                m_monsterAI.m_randomMoveInterval = 10f; 
+            }
+            else if (IsClericClass)
+            {
+                // Cleric should act like melee unit to charge with mace
+                m_monsterAI.m_circulateWhileCharging = false;
+                m_monsterAI.m_randomMoveInterval = 0f;
+                m_monsterAI.m_randomCircleInterval = 0f;
+                m_monsterAI.m_interceptTimeMax = 0f;
+                m_monsterAI.m_interceptTimeMin = 0f;
+            }
+
+            if (!m_initialized)
+            {
+                m_initialized = true;
+                ConfigManager.LogAI($"[CombatAI] Forced aggressive AI on {gameObject.name} (Melee:{IsMeleeClass}, Ranged:{IsRangedClass})");
+            }
+        }
+
+        private float m_healScanTimer = 0f;
+        private float m_elementRotateTimer = 0f;
+        private List<ItemDrop.ItemData> m_elementalStaves = new List<ItemDrop.ItemData>();
+
+        private void FixedUpdate()
+        {
+            if (m_monsterAI == null) return;
+
+            // Enforce aggressive AI flags every second
+            if (Time.frameCount % 60 == 0)
+            {
+                if (m_monsterAI.m_aggravatable || m_monsterAI.m_passiveAggresive || m_monsterAI.m_fleeIfNotAlerted)
+                {
+                    ConfigManager.LogAI($"[CombatAI] AI flags were reset on {gameObject.name}, re-forcing!");
+                    ForceAggressiveAI();
+                }
+            }
+
+            // Force lock melee pacing every frame to stop engine overrides
+            if (IsMeleeClass || IsClericClass)
+            {
+                // We want them to patrol when idle, so leave m_randomMoveInterval alone or set to a high value only in combat.
+                // But definitely stop them from circling their targets!
+                m_monsterAI.m_randomCircleInterval = 9999f;
+                m_monsterAI.m_circulateWhileCharging = false;
+            }
+
+            // Custom Cleric Healing Logic
+            if (IsClericClass)
+            {
+                m_clericHealTimer += Time.fixedDeltaTime;
+
+                m_healScanTimer += Time.fixedDeltaTime;
+                if (m_healScanTimer >= 2f)
+                {
+                    m_healScanTimer = 0f;
+                    UpdateClericAI();
+                }
+            }
+
+            // Custom Elemental Mage Rotation
+            if (IsElementalMage)
+            {
+                UpdateElementalMageAI();
+            }
+        }
+
+        private void UpdateClericAI()
+        {
+            if (m_monsterAI.m_character != null && m_monsterAI.m_character.InAttack()) return;
+
+            // 15-second cooldown for Cleric AoE Heal
+            if (m_clericHealTimer < 15f) return;
+
+            bool playedAnimation = false;
+            int clericLevel = m_monsterAI.m_character.GetLevel();
+
+            Collider[] array = Physics.OverlapSphere(transform.position, 15f, LayerMask.GetMask("character", "character_net", "character_ghost"));
+            foreach (Collider col in array)
+            {
+                Character c = col.GetComponent<Character>();
+                if (c != null && !c.IsDead())
+                {
+                    // Heal ONLY self, players, and explicitly tamed allies (excludes wild vanilla Dvergrs!)
+                    if (c == m_monsterAI.m_character || c.IsPlayer() || c.IsTamed())
+                    {
+                        if (c.GetHealthPercentage() < 0.8f)
+                        {
+                            if (!playedAnimation)
+                            {
+                                m_monsterAI.m_character.GetZAnim().SetTrigger("StaffCast");
+                                playedAnimation = true;
+                                m_clericHealTimer = 0f; // Reset cooldown ONLY if we actually healed someone
+                                ConfigManager.LogAI($"[Cleric] Triggered AoE HoT Pulse (Level {clericLevel})");
+                            }
+                            
+                            // Attach or Refresh HoT component
+                            DvergrHoT[] existingHots = c.gameObject.GetComponents<DvergrHoT>();
+                            foreach (var oldHot in existingHots)
+                            {
+                                Destroy(oldHot);
+                            }
+                            
+                            DvergrHoT hot = c.gameObject.AddComponent<DvergrHoT>();
+                            hot.Setup(clericLevel);
+                        }
+                    }
+                }
+            }
+        }
+
+        private int m_elementSetIndex = 0;
+        private string[][] m_elementSets = new string[][] 
+        {
+            new string[] { "AllyDvergr_MageFireball" },
+            new string[] { "AllyDvergr_MageIceProjectile" },
+            new string[] { "AllyDvergrStaffEarth" },
+            new string[] { "AllyDvergrStaffSpirit" }
+        };
+        private void UpdateElementalMageAI()
+        {
+            if (m_monsterAI.m_character == null) return;
+            Humanoid hum = m_monsterAI.m_character as Humanoid;
+            if (hum == null) return;
+            
+            var inventory = hum.GetInventory();
+            if (inventory == null) return;
+
+            m_elementRotateTimer += Time.fixedDeltaTime;
+            if (m_elementRotateTimer >= 10f)
+            {
+                m_elementRotateTimer = 0f;
+
+                m_elementSetIndex = (m_elementSetIndex + 1) % m_elementSets.Length;
+                string[] activeSet = m_elementSets[m_elementSetIndex];
+
+                // Completely obliterate all weapons from the Mage's inventory
+                List<ItemDrop.ItemData> toRemove = new List<ItemDrop.ItemData>();
+                foreach (var item in inventory.GetAllItems())
+                {
+                    if (item.IsWeapon() || item.m_shared.m_itemType == ItemDrop.ItemData.ItemType.TwoHandedWeapon)
+                    {
+                        hum.UnequipItem(item);
+                        toRemove.Add(item);
+                    }
+                }
+                foreach (var item in toRemove) inventory.RemoveItem(item);
+
+                // Re-spawn the active set directly from prefabs
+                foreach (string expectedName in activeSet)
+                {
+                    GameObject prefab = ObjectDB.instance != null ? ObjectDB.instance.GetItemPrefab(expectedName) : null;
+                    if (prefab == null && ZNetScene.instance != null) prefab = ZNetScene.instance.GetPrefab(expectedName);
+                    
+                    if (prefab != null)
+                    {
+                        ItemDrop drop = prefab.GetComponent<ItemDrop>();
+                        if (drop != null)
+                        {
+                            ItemDrop.ItemData clonedItem = drop.m_itemData.Clone();
+                            clonedItem.m_dropPrefab = prefab;
+                            inventory.AddItem(clonedItem);
+                            hum.EquipItem(clonedItem);
+                        }
+                    }
+                }
+
+                ConfigManager.LogAI($"[ElementalMage] Rebuilt inventory with element set: {m_elementSetIndex}");
+            }
+        }
+    }
+}
