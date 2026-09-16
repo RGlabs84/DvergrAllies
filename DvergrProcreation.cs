@@ -19,6 +19,11 @@ namespace DvergrAllies
 
         private void Awake()
         {
+            // Valkyrie's Cargo's merchant is a plain Dverger wearing this component off the shared prefab. He
+            // is tamed (by VC, not by us) and must never breed. ExcludeIfIngvar has destroyed this component
+            // when it returns true - nothing below may run. See ValkyriesCargoCompat.
+            if (ValkyriesCargoCompat.ExcludeIfIngvar(gameObject, nameof(DvergrProcreation))) return;
+
             m_nview = GetComponent<ZNetView>();
             m_character = GetComponent<Character>();
             m_baseAI = GetComponent<BaseAI>();
@@ -175,7 +180,7 @@ namespace DvergrAllies
             ResetPregnancy();
 
             string myPrefab = gameObject.name.Replace("(Clone)", "").Trim();
-            string comboPrefab = DetermineOffspring(myPrefab, partnerPrefab);
+            string comboPrefab = DetermineOffspring(myPrefab, partnerPrefab, out bool wasSpecialCombo);
 
             ConfigManager.LogBreeding($"[Procreation] BIRTHING PROCESS START: ParentA={myPrefab}(Lvl {m_character.GetLevel()}), ParentB={partnerPrefab}(Lvl {partnerLevel}) -> Outcome={comboPrefab}");
 
@@ -188,24 +193,50 @@ namespace DvergrAllies
                 Character childChar = offspring.GetComponent<Character>();
                 if (childChar != null && m_character != null)
                 {
+                    // Both stamps go on BEFORE SetTamed, because SetTamed's postfix
+                    // (Patch_Character_SetTamed_OwnerTracking) reads them:
+                    //  - the owner tag, so it doesn't overwrite the bloodline with its nearby-player
+                    //    guess - nobody may even be standing at the pen when a birth fires;
+                    //  - the counted flag, so a birth isn't ALSO tallied as a wild tame.
+                    long ownerId = 0L;
+                    string ownerName = "Unknown";
+                    ZNetView childNview = offspring.GetComponent<ZNetView>();
+                    if (childNview != null && childNview.IsValid() && m_nview != null && m_nview.IsValid())
+                    {
+                        ZDO childZdo = childNview.GetZDO();
+                        childZdo.Set(DvergrStatsExporter.TameCountedKey, 1);
+
+                        // Offspring of an unattributed Dvergr stay unattributed - no invented owner.
+                        if (DvergrStatsExporter.TryGetOwner(m_nview.GetZDO(), out ownerId, out ownerName))
+                            DvergrStatsExporter.StampOwner(childZdo, ownerId, ownerName);
+                    }
+
                     childChar.SetTamed(m_character.IsTamed());
-                    
+
                     // Level logic: Highest of both parents + chance to level up
                     int myLevel = m_character.GetLevel();
                     int baseLevel = Mathf.Max(myLevel, partnerLevel);
                     int finalLevel = baseLevel;
+                    bool starUp = false;
 
                     if (UnityEngine.Random.Range(0, 100) < ConfigManager.LevelUpChance.Value)
                     {
                         finalLevel++;
+                        starUp = true;
                         ConfigManager.LogBreeding($"[Procreation] {comboPrefab} offspring triggered LEVEL UP CHANCE! Level increased.");
                     }
 
                     // Cap to MaxBreedingLevel
                     finalLevel = Mathf.Clamp(finalLevel, 1, ConfigManager.MaxBreedingLevel.Value);
                     childChar.SetLevel(finalLevel);
-                    
+
                     ConfigManager.LogBreeding($"[Procreation] Birthed {comboPrefab} at Level {finalLevel} (Max {ConfigManager.MaxBreedingLevel.Value})");
+
+                    // A birth leaves no trace once the offspring later dies, so it has to be banked now.
+                    // starUp reports the roll, not the result: the clamp above can swallow the extra
+                    // level at the cap, and "how often did the roll hit" is the interesting figure.
+                    DvergrStatsStore.ReportBirth(DvergrStatsSchema.ClassifyPrefabName(comboPrefab),
+                        ownerId, ownerName, wasSpecialCombo, starUp, finalLevel);
                 }
 
                 if (m_birthEffects != null && m_birthEffects.HasEffects())
@@ -218,7 +249,7 @@ namespace DvergrAllies
             yield break;
         }
 
-        private string DetermineOffspring(string parentA, string parentB)
+        private string DetermineOffspring(string parentA, string parentB, out bool wasSpecialCombo)
         {
             bool hasFire = parentA.Contains("Fire") || parentB.Contains("Fire");
             bool hasIce = parentA.Contains("Ice") || parentB.Contains("Ice");
@@ -227,19 +258,25 @@ namespace DvergrAllies
             bool hasWarrior = parentA.Contains("Warrior") || parentB.Contains("Warrior");
             bool hasCleric = parentA.Contains("Cleric") || parentB.Contains("Cleric");
 
+            // True only when a mutation actually came out, NOT merely when the chance roll passed: a
+            // successful roll on a pair with no matching combo below still falls through to plain
+            // inheritance, and counting that as a mutation would overstate births_special_combo.
+            wasSpecialCombo = true;
+
             if (UnityEngine.Random.Range(0, 100) < ConfigManager.SpecialComboChance.Value)
             {
                 // Tier 1 Mutations
                 if (hasRogue && !hasFire && !hasIce && !hasSupport && !hasWarrior && !hasCleric) return "AllyDvergrWarrior"; // Rogue + Rogue
                 if (hasSupport && !hasRogue && !hasFire && !hasIce && !hasWarrior && !hasCleric) return "AllyDvergrCleric"; // Support + Support
                 if (hasFire && hasIce) return "AllyDvergrMageElemental"; // Fire + Ice
-                
+
                 // Tier 2 Mutations
                 if (hasRogue && hasFire && !hasIce) return "AllyDvergrSpellswordFire"; // Rogue + Fire
                 if (hasRogue && hasIce && !hasFire) return "AllyDvergrSpellswordIce"; // Rogue + Ice
                 if (hasWarrior && hasWarrior) return "AllyDvergrBerserker"; // Warrior + Warrior
             }
 
+            wasSpecialCombo = false;
             return UnityEngine.Random.value > 0.5f ? parentA : parentB;
         }
     }

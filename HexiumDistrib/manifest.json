@@ -1,10 +1,11 @@
 {
     "name": "DvergrAllies",
-    "version_number": "1.0.3",
+    "version_number": "1.0.8",
     "website_url": "https://discord.gg/GTTCnGS6Ym",
     "description": "Tame, breed, and lead an army of custom Dvergr Allies! Features 4 custom classes (Warrior, Cleric, Spellsword, Elemental Mage), breeding genetics, star-level weapon scaling, and native combat AI.",
     "dependencies": [
-        "denikson-BepInExPack_Valheim-5.4.2333",
-        "ValheimModding-Jotunn-2.29.2"
+        "denikson-BepInExPack_Valheim-5.4.2350",
+        "ValheimModding-Jotunn-2.30.0",
+        "ValheimModding-JsonDotNET-13.0.4"
     ]
 }

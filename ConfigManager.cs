@@ -31,6 +31,11 @@ namespace DvergrAllies
         public static ConfigEntry<float> AllyHealthMultiplier;
         public static ConfigEntry<float> AllyDamageMultiplier;
 
+        // BarrkBOT Export
+        public static ConfigEntry<bool> EnableStatsExport;
+        public static ConfigEntry<float> StatsExportInterval;
+        public static ConfigEntry<bool> ForceCensusUnavailable;
+
         // Debug
         public static ConfigEntry<bool> EnableDebugLogs;
         public static ConfigEntry<bool> DebugFull;
@@ -89,6 +94,10 @@ namespace DvergrAllies
 
             AllyHealthMultiplier = config.Bind("4 - Stats", "Health Multiplier", 1.0f, SyncedConfig("Multiplier applied to base health of Ally Dvergrs."));
             AllyDamageMultiplier = config.Bind("4 - Stats", "Damage Multiplier", 1.0f, SyncedConfig("Multiplier applied to base damage of Ally Dvergrs."));
+
+            EnableStatsExport = config.Bind("6 - BarrkBOT Export", "Enable Stats Export", true, "Periodically writes Dvergr population/ownership stats to BepInEx/config/DvergrAllies/ as JSON for BarrkBOT to read. Dedicated server / world host only; local-only setting, not synced.");
+            StatsExportInterval = config.Bind("6 - BarrkBOT Export", "Export Interval", 60f, "Seconds between stats exports. BarrkBOT only sweeps its watch folder every 20 minutes, so going below 60s buys nothing but disk churn.");
+            ForceCensusUnavailable = config.Bind("6 - BarrkBOT Export", "Force Census Unavailable", false, "TESTING ONLY. Forces the export to report 'census_unavailable' as if the world could not be scanned, so the failure path can be exercised on a live server without breaking anything. Population counts are written as null (not zero); lifetime history is unaffected and keeps recording. The export says plainly that it was forced, so this cannot be mistaken for a real fault. Leave this off in normal play.");
 
             EnableDebugLogs = config.Bind("5 - Debug", "Enable Debug Logs", false, SyncedConfig("Master switch to enable debug logging."));
             DebugFull = config.Bind("5 - Debug", "Debug Full", false, SyncedConfig("If true, overrides sub-categories and logs absolutely everything."));

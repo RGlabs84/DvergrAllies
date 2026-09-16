@@ -3,7 +3,7 @@
     <TargetFramework>net48</TargetFramework>
     <AssemblyName>DvergrAllies</AssemblyName>
     <Description>A Valheim mod that allows taming and crossbreeding Dvergrs.</Description>
-    <Version>1.0.3</Version>
+    <Version>1.0.8</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <RestoreAdditionalProjectSources>
@@ -12,38 +12,52 @@
     </RestoreAdditionalProjectSources>
   </PropertyGroup>
 
+  <!-- tools/ holds standalone harnesses with their own csproj (and their own obj/ output). Without this
+       the SDK's default **/*.cs glob sucks their sources AND their generated AssemblyInfo.cs into this
+       assembly, which fails with duplicate-attribute CS0579 the moment a harness has been built once. -->
   <ItemGroup>
+    <Compile Remove="tools/**" />
+    <None Remove="tools/**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Newtonsoft.Json is NOT provided by Valheim or BepInExPack. PackageReference copies it to the
+         build output next to DvergrAllies.dll by default so the BarrkBOT JSON export doesn't throw
+         FileNotFoundException the moment it JITs - see WubarrksEye.csproj for the same failure mode. -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
     <PackageReference Include="BepInEx.Core" Version="5.*" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
     <PackageReference Include="UnityEngine.Modules" Version="2022.3.28" IncludeAssets="compile" />
-    <PackageReference Include="JotunnLib" Version="2.*" />
+    <PackageReference Include="JotunnLib" Version="[2.30.0]" />
     <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1" PrivateAssets="all" />
   </ItemGroup>
 
+  <!-- ALL reference assemblies come from the SHARED c:\WubarrkCODING\libs-Tools folder, never from a per-project
+       libs\ copy. That is the standing rule across every mod in this solution root. -->
   <ItemGroup>
     <Reference Include="assembly_valheim" Publicize="true">
-      <HintPath>libs\assembly_valheim.dll</HintPath>
+      <HintPath>..\libs-Tools\assembly_valheim.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="assembly_guiutils" Publicize="true">
-      <HintPath>libs\assembly_guiutils.dll</HintPath>
+      <HintPath>..\libs-Tools\assembly_guiutils.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="assembly_utils" Publicize="true">
-      <HintPath>libs\assembly_utils.dll</HintPath>
+      <HintPath>..\libs-Tools\assembly_utils.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="gui_framework">
-      <HintPath>libs\gui_framework.dll</HintPath>
+      <HintPath>..\libs-Tools\gui_framework.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="steamworks.net">
-      <HintPath>libs\steamworks.net.dll</HintPath>
+      <HintPath>..\libs-Tools\steamworks.net.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>libs\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>..\libs-Tools\Unity.TextMeshPro.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>

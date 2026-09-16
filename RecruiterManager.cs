@@ -79,10 +79,29 @@ namespace DvergrAllies
                 {
                     Vector3 spawnPos = character.transform.position + character.transform.forward * 2f;
                     GameObject clone = UnityEngine.Object.Instantiate(dvergr, spawnPos, character.transform.rotation);
-                    
+
+                    Player summoner = character as Player;
+                    long ownerId = summoner != null ? summoner.GetPlayerID() : 0L;
+                    string ownerName = summoner != null ? summoner.GetPlayerName() : "Unknown";
+
+                    // Stamped before Tame() so the SetTamed postfix credits the buyer instead of
+                    // whoever happens to be standing closest, and so this lands in the contract
+                    // counters only - a summon is a purchase, not a tame, and double-counting it would
+                    // make tamed_alltime drift up every time somebody buys from Haldor.
+                    ZNetView cloneNview = clone.GetComponent<ZNetView>();
+                    if (cloneNview != null && cloneNview.IsValid())
+                    {
+                        ZDO cloneZdo = cloneNview.GetZDO();
+                        cloneZdo.Set(DvergrStatsExporter.TameCountedKey, 1);
+                        DvergrStatsExporter.StampOwner(cloneZdo, ownerId, ownerName);
+                    }
+
                     Tameable tame = clone.GetComponent<Tameable>();
                     if (tame != null) tame.Tame();
-                    
+
+                    DvergrStatsStore.ReportContract(
+                        DvergrStatsSchema.ClassifyPrefabName(randomType), ownerId, ownerName);
+
                     string niceName = randomType.Replace("AllyDvergr", "");
                     if (niceName == "Rogue") niceName = "Rogue";
                     

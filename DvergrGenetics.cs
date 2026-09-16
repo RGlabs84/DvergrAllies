@@ -47,6 +47,11 @@ namespace DvergrAllies
 
         private void Awake()
         {
+            // Before the owner-side writes below: Valkyrie's Cargo's merchant rides the shared Dverger prefab,
+            // and his ZDO is VC's to write, not ours - no gender, no stealth flag. ExcludeIfIngvar has
+            // destroyed this component when it returns true. See ValkyriesCargoCompat.
+            if (ValkyriesCargoCompat.ExcludeIfIngvar(gameObject, nameof(DvergrGenetics))) return;
+
             m_nview = GetComponent<ZNetView>();
             m_humanoid = GetComponent<Humanoid>();
 
@@ -128,6 +133,11 @@ namespace DvergrAllies
 
             ZNetView nview = __instance.GetComponent<ZNetView>();
             if (nview == null || !nview.IsValid() || !nview.IsOwner()) return;
+            // LOAD-BEARING, not belt-and-braces: Valkyrie's Cargo's CargoMerchant.Awake calls SetTamed(true)
+            // from inside VC's Humanoid.Awake postfix, BEFORE our components have reached Awake, so on the
+            // pilot's (owning) client this postfix runs while DvergrGenetics is still on Ingvar and the check
+            // above passes. Without this line he gets SoMStealthExempt=1 written onto a ZDO VC owns.
+            if (ValkyriesCargoCompat.IsIngvar(nview)) return;
 
             DvergrGenetics.RefreshStealthExemption(__instance, nview, tamed);
         }

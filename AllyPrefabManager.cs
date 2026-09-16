@@ -514,6 +514,9 @@ namespace DvergrAllies
                     return;
                 }
 
+                // Valkyrie's Cargo's merchant is a "Dverger(Clone)" too; his AI is CargoMerchant's to drive.
+                if (ValkyriesCargoCompat.IsExcluded(__instance.gameObject)) return;
+
                 __instance.m_passiveAggresive = false;
                 __instance.m_attackPlayerObjects = false;
                 __instance.m_avoidFire = false;
