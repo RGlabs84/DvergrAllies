@@ -57,10 +57,12 @@ namespace DvergrAllies
 
         // Tameable.Awake registers these on the creature's ZNetView (assembly_valheim.decompiled.cs:19067-19069,
         // 1.0.7; identical on the dedicated-server build). A handler left behind on a destroyed component still
-        // runs when the RPC arrives - and in a session mixing this build with a 1.0.7 client (VersionStrictness
-        // .Minor lets 1.0.x mix), the old client still has a live Tameable on Ingvar and CAN send "Command".
-        // Unregistering makes the new client drop it ("Failed to find rpc method") instead of making Ingvar
-        // follow someone. Unregister of a name that was never registered is a plain Dictionary.Remove.
+        // runs when the RPC arrives. Nothing on a same-version peer sends them (the only senders are a live
+        // Tameable's Interact/UseItem, and every peer has stripped his), and NetworkCompatibility is
+        // VersionStrictness.Patch precisely so a pre-1.0.8 client with a live Tameable on him cannot join - but
+        // a stale handler that would make Ingvar follow someone is not something to leave lying around on the
+        // strength of a version gate. Unregistering makes such an RPC drop ("Failed to find rpc method").
+        // Unregister of a name that was never registered is a plain Dictionary.Remove.
         private static readonly string[] TameableRpcs = { "Command", "SetName", "RPC_UnSummon" };
 
         public static bool IsIngvar(ZDO zdo)

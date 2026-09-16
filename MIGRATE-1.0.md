@@ -6,11 +6,12 @@
 > identical on the server build - so the tally below is now **8**. Evidence for this release: refcheck against the real
 > 1.0 client Managed and dedicated-server Managed: `checked 3103 references, 8 Harmony targets (0 dynamic) - RESULT: OK`
 > both sides; `tools/StatsExportFixtures` 20/20 pass; boot on the Linux dedicated server with Jotunn 2.30.0 **and
-> Valkyrie's Cargo 0.1.1 loaded beside it** (profile `~/valheim-testbed/profiles/dvergr-vc-108`, port 2692):
-> `BOOTED after 22s`, load order `Jotunn -> Valkyrie's Cargo -> DvergrAllies` (soft `BepInDependency`), log has
+> Valkyrie's Cargo 0.1.1 loaded beside it** (profile `~/valheim-testbed/profiles/dvergr-vc-108`, port 2693):
+> `BOOTED after 19s`, load order `Jotunn -> Valkyrie's Cargo -> DvergrAllies` (soft `BepInDependency`), log has
 > `[Compat] Valkyrie's Cargo detected: its merchant Ingvar (ZDO key VCargo_ingvar) will never be tamed ...`,
 > `[Patches] 8 applied, none failed.`, `Successfully injected Taming/Breeding components into 8 wild Dvergr prefabs!`,
-> VC's `director up`, no exception from either plugin. Shipped DLL md5 `656c1ce88327d01cae5dfe851f24f5e4` (78336 bytes), identical in
+> VC's `director up`, no exception from either plugin. `NetworkCompatibility` is now `VersionStrictness.Patch`
+> (was `Minor`): server and every client must run the identical version. Shipped DLL md5 `3949359eed2168ed39e1f932767dc733` (78336 bytes), identical in
 > `bin/Release/net48/`, `HexiumDistrib/DvergrAllies/plugins/` and the boot profile. Everything below this banner
 > describes 1.0.7 and its 1.0.12 re-check and is left as written; where it says "7 Harmony targets" read 8 for 1.0.8.
 

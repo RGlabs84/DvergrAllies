@@ -12,7 +12,12 @@ namespace DvergrAllies
     // Soft: only orders us after Valkyrie's Cargo when it is present, so the detection line below is
     // accurate. Ingvar handling itself keys off his ZDO and works whether or not this ever resolves.
     [BepInDependency(ValkyriesCargoCompat.PluginGuid, BepInDependency.DependencyFlags.SoftDependency)]
-    [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Minor)]
+    // Patch, not Minor (1.0.8): every client and the server must run the exact same version. Minor let a
+    // 1.0.7 client into a 1.0.8 session, where its still-live DvergrTameable could pet/command/rename
+    // Valkyrie's Cargo's merchant and write follow/name keys onto his ZDO that the new build cannot stop
+    // (see ValkyriesCargoCompat). Patch releases of this mod change Harmony patches and ZDO writes, so
+    // exact-match is the honest contract; Jotunn shows the mismatch screen with both versions on it.
+    [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Patch)]
     internal class Plugin : BaseUnityPlugin
     {
         public const string PluginGUID = "wubarrk.dvergrallies";
