@@ -24,6 +24,10 @@ namespace DvergrAllies
         // Leash Settings
         public static ConfigEntry<float> MaxFollowLeash;
 
+        // Faction & defences
+        public static ConfigEntry<bool> TamedJoinPlayerFaction;
+        public static ConfigEntry<bool> SpareAlliesFromBallistas;
+
         // Economy
         public static ConfigEntry<int> ContractCost;
 
@@ -89,6 +93,9 @@ namespace DvergrAllies
             MaxBreedingLevel = config.Bind("2 - Breeding", "Max Breeding Level", 3, SyncedConfig("Maximum level (3 = 2 stars) a Dvergr can reach through breeding."));
 
             MaxFollowLeash = config.Bind("2.5 - AI", "Max Follow Leash", 40f, SyncedConfig("Max distance (meters) a Dvergr can chase an enemy before dropping aggro to return to the player they are following."));
+
+            TamedJoinPlayerFaction = config.Bind("2.6 - Faction", "Tamed Join Player Faction", true, SyncedConfig("A tamed Dvergr switches from the Dverger faction to the Players faction, as the contract and bred Ally Dvergrs already are, and players can no longer hit it by accident. Untamed ones stay Dverger and can still be struck to anger them."));
+            SpareAlliesFromBallistas = config.Bind("2.6 - Faction", "Spare Allies From Ballistas", true, SyncedConfig("Ballistas built by a player pass over tamed Dvergrs (and Players-faction Ally Dvergrs). Wild Dvergrs and ballistas that are not player-built are unaffected."));
 
             ContractCost = config.Bind("3 - Economy", "Contract Cost", 999, SyncedConfig("Cost in coins to purchase a Dvergr Contract from Haldor or Recruiter."));
 

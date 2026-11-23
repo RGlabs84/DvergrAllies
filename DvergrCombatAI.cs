@@ -17,15 +17,12 @@ namespace DvergrAllies
         private MonsterAI m_monsterAI;
         private Character m_character;
         private bool m_initialized = false;
-        private bool m_isConfigured = false;
         private float m_clericHealTimer = 15f; // Start off cooldown
 
         private void Awake()
         {
             m_monsterAI = GetComponent<MonsterAI>();
             m_character = GetComponent<Character>();
-
-            m_isConfigured = false;
 
             if (Plugin.HasBalrondIdleActors)
             {

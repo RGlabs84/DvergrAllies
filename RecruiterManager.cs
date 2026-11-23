@@ -18,7 +18,12 @@ namespace DvergrAllies
         private static void CreateContractItem()
         {
             GameObject baseItem = PrefabManager.Instance.GetPrefab("Amber");
-            if (baseItem == null) return;
+            if (baseItem == null)
+            {
+                Jotunn.Logger.LogError("[Contract] Amber prefab not found, so the Dvergr Contract was never " +
+                                       "created and cannot appear in Haldor's stock this session.");
+                return;
+            }
 
             CustomItem contract = new CustomItem("DvergrContract", "Amber");
             ItemDrop drop = contract.ItemDrop;
@@ -43,7 +48,12 @@ namespace DvergrAllies
             drop.m_itemData.m_shared.m_value = 0; // Prevent selling it back for 5 coins!
             drop.m_itemData.m_dropPrefab = contract.ItemPrefab; // Explicitly set to prevent null ref inside BuyItem RPC!
 
-            ItemManager.Instance.AddItem(contract);
+            if (ItemManager.Instance.AddItem(contract))
+                Jotunn.Logger.LogInfo(
+                    $"[Contract] Dvergr Contract registered at {ConfigManager.ContractCost.Value} coins.");
+            else
+                Jotunn.Logger.LogError("[Contract] Jotunn refused the Dvergr Contract item, so it will not " +
+                                       "appear in Haldor's stock this session.");
         }
     }
 
@@ -114,42 +124,74 @@ namespace DvergrAllies
     [HarmonyPatch(typeof(Trader))]
     public static class Patches_Trader
     {
+        // Every exit from here says which one it took. Trader.Start is a popular target - Yggdrasil's
+        // Reckoning sells its Tear here, Valheim Runestone sells its trader cards here - and HarmonyX runs
+        // all of a method's postfixes as one chain, so an exception thrown in somebody else's postfix skips
+        // every later one, ours included, without a word in LogOutput.log. That left "the contract is not in
+        // Haldor's stock" with four indistinguishable causes: not Haldor, no prefab, already added, or this
+        // method never ran. It is now readable off the log, and the absence of ANY [Contract] line for a
+        // trader who woke is itself the answer: something ahead of us in the chain threw.
         [HarmonyPatch(nameof(Trader.Start))]
         [HarmonyPostfix]
         public static void TraderStartPostfix(Trader __instance)
         {
-            if (__instance.gameObject.name.Contains("Haldor"))
+            string traderName = __instance.gameObject.name;
+
+            if (!traderName.Contains("Haldor"))
             {
-                GameObject contract = PrefabManager.Instance.GetPrefab("DvergrContract");
-                if (contract != null)
+                Jotunn.Logger.LogDebug($"[Contract] Trader '{traderName}' is not Haldor; stock unchanged.");
+                return;
+            }
+
+            GameObject contract = PrefabManager.Instance.GetPrefab("DvergrContract");
+            if (contract == null)
+            {
+                Jotunn.Logger.LogError($"[Contract] {traderName} woke but the DvergrContract prefab is missing, " +
+                                       "so his stock is unchanged. The registration line at startup says why.");
+                return;
+            }
+
+            // Avoid duplicate adds if Awake is called multiple times somehow
+            foreach (var item in __instance.m_items)
+            {
+                if (item.m_prefab != null && item.m_prefab.gameObject.name == "DvergrContract")
                 {
-                    // Avoid duplicate adds if Awake is called multiple times somehow
-                    foreach (var item in __instance.m_items)
-                    {
-                        if (item.m_prefab != null && item.m_prefab.gameObject.name == "DvergrContract") return;
-                    }
-
-                    Trader.TradeItem tradeItem = new Trader.TradeItem
-                    {
-                        m_prefab = contract.GetComponent<ItemDrop>(),
-                        m_price = ConfigManager.ContractCost.Value,
-                        m_stack = 1,
-                        m_requiredGlobalKey = "" // Essential! Prevents StoreGui.UpdateRecipe() from throwing a silent null reference exception!
-                    };
-
-                    // Bog Witch update added new string fields (like m_requiredPlayerKey)
-                    // If they remain null, StoreGui or Trader RPCs crash silently.
-                    foreach (var field in typeof(Trader.TradeItem).GetFields())
-                    {
-                        if (field.FieldType == typeof(string) && field.GetValue(tradeItem) == null)
-                        {
-                            field.SetValue(tradeItem, "");
-                        }
-                    }
-
-                    __instance.m_items.Add(tradeItem);
+                    Jotunn.Logger.LogInfo($"[Contract] Already in {traderName}'s stock; not added twice.");
+                    return;
                 }
             }
+
+            Trader.TradeItem tradeItem = new Trader.TradeItem
+            {
+                m_prefab = contract.GetComponent<ItemDrop>(),
+                m_price = ConfigManager.ContractCost.Value,
+                m_stack = 1,
+                m_requiredGlobalKey = "", // Essential! Prevents StoreGui.UpdateRecipe() from throwing a silent null reference exception!
+
+                // Valheim 1.0 added this one, and it is NOT a string, so the backfill loop below cannot reach
+                // it. StoreGui.BuySelectedItem calls m_buyPlayerEffects.Create() unconditionally once a
+                // purchase has gone through, so leaving it null throws AFTER the coins are taken and the
+                // contract handed over - the buy effects never play and the store list never refreshes,
+                // because FillList() is the statement after it. A fresh EffectList makes Create() a no-op:
+                // its m_effectPrefabs already defaults to an empty array.
+                m_buyPlayerEffects = new EffectList()
+            };
+
+            // Bog Witch update added new string fields (like m_requiredPlayerKey)
+            // If they remain null, StoreGui or Trader RPCs crash silently. StoreGui.FillList reads
+            // m_tooltip.Length on every row it draws, so a null one of those takes down the whole list.
+            foreach (var field in typeof(Trader.TradeItem).GetFields())
+            {
+                if (field.FieldType == typeof(string) && field.GetValue(tradeItem) == null)
+                {
+                    field.SetValue(tradeItem, "");
+                }
+            }
+
+            int before = __instance.m_items.Count;
+            __instance.m_items.Add(tradeItem);
+            Jotunn.Logger.LogInfo($"[Contract] Added to {traderName}'s stock at {tradeItem.m_price} coins " +
+                                  $"({before} entries before, {__instance.m_items.Count} after).");
         }
     }
 }

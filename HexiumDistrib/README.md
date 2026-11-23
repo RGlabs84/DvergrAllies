@@ -1,151 +1,272 @@
-<div align="center">
-
+<!-- README schema v3 -->
+<!-- README schema v3.1 -->
 # ⚒️ Dvergr Allies
 
-**Tame, breed, and lead an army of custom Dwarven warriors.**
+![ᛒ DVERGR ALLIES · TAME · BREED · COMMAND](https://img.shields.io/badge/DVERGR_ALLIES-TAME_%C2%B7_BREED_%C2%B7_COMMAND-2f6f7e?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMyAxVjEzTTMgMUw4IDRMMyA3TDggMTBMMyAxMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOGNhZmI4IiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8%2BPC9zdmc%2B)
+![VERSION · 1.0.13](https://img.shields.io/badge/VERSION-1.0.13-8b1e1e?style=for-the-badge&labelColor=1b1b1b)
+![CLIENT + SERVER · EVERYONE MUST MATCH](https://img.shields.io/badge/CLIENT_%2B_SERVER-EVERYONE_MUST_MATCH-1f4e79?style=for-the-badge&labelColor=1b1b1b)
 
-[![Valheim](https://img.shields.io/badge/Valheim-Game-blue?style=flat-square)](https://www.valheimgame.com/)
-[![BepInEx](https://img.shields.io/badge/BepInEx-Plugin-orange?style=flat-square)](https://github.com/BepInEx/BepInEx)
-[![Jotunn](https://img.shields.io/badge/Jotunn-Library-green?style=flat-square)](https://github.com/Valheim-Modding/Jotunn)
+| ⚒️ **6** | 🪙 **999** | ⭐ **2★** | 🔒 **Synced** |
+|:-:|:-:|:-:|:-:|
+| custom classes to breed | coins for an instant ally | star cap from breeding | the server sets the rules |
 
-</div>
+> *The Dvergr never asked to be tamed. They asked for sausages. Somewhere between the two, an army happened.*
 
-> [!NOTE]
-> Dvergr Allies is a massive overhaul to the Valheim taming system, allowing you to tame vanilla Dvergrs, breed them, and genetically evolve them into **four distinct custom combat classes**. Featuring dynamic weapon scaling, complex genetics, and custom-built Native Monster AI, your Dvergrs are no longer just passive NPCs—they are an elite fighting force.
+### Tame a Dvergr. Breed it. Watch it become something worse.
 
----
+Feed the wild Dvergr of the Mistlands until they follow you, or buy a contract from Haldor for an ally on the spot. Pair them up and their children can mutate into elite classes with their own weapons, spells and tempers.
 
-## 🛡️ Features
-
-> [!TIP]
-> **Mercenary Contracts:** Don't want to tame? Buy **Dvergr Contracts** from Haldor the Trader! Consuming a contract will instantly summon a fully-tamed, randomized Dvergr class (including rare elites like Spellswords or Berserkers!).
-
-- **Taming & Breeding:** Tame wild vanilla Dvergrs using `Coins`, `Cooked Meat`, `Sausages`, or `Yggdrasil Wood`.
-- **Genetic Class System:** Breed your Dvergrs to discover specialized classes. Cross-breed existing classes to unlock powerful elite hybrids.
-- **Dynamic Equipment Scaling:** Your allies don't just get more health when they level up. Their physical gear dynamically upgrades! A 0-star Warrior wields a Bronze Sword. A 1-star upgrades to Iron. A 2-star wields a devastating Blackmetal Battleaxe.
-- **Native Combat AI:** Weapons and magic have been flawlessly integrated into the native Valheim monster physics engine, ensuring perfect hit registration, aggression, and particle effects.
-- **Cleric AoE Healing:** Clerics pulse massive Area-of-Effect Heal-over-Time spells to keep your army alive during raids.
-- **Discord Stats via BarrkBOT:** Your server tracks your empire and reports it to Discord — who commands the largest warband, whose bloodlines have taken the heaviest losses, and who got lucky pulling elites out of Haldor's contracts. Deaths and births are recorded as they happen and survive server restarts.
+Your army grows through its bloodlines, its gear upgrades with its stars, and a Cleric keeps the line standing. A Dvergr you tame is on your side, and your own ballistas know it.
 
 ---
 
-## 🧬 The Classes & Prefabs
+![ᛞ NEW IN 1.0.13 · HANDS OFF YOUR OWN](https://img.shields.io/badge/NEW_IN_1.0.13-HANDS_OFF_YOUR_OWN-8b1e1e?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMSAyVjEyTDkgMlYxMkwxIDIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2JmODM4MyIgc3Ryb2tlLXdpZHRoPSIyLjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg%3D%3D)
 
-| Class | Icon | Role | Abilities & Upgrades |
-|:---|:---:|:---|:---|
-| **Base Dvergr**<br>`AllyDvergr` | ⛏️ | **Foundation** | The genetic baseline. Wields simple weapons. |
-| **The Warrior**<br>`AllyDvergrWarrior` | ⚔️ | **Tank / Aggro** | **0★:** Bronze Sword & Buckler<br>**1★:** Iron Sword & Silver Shield<br>**2★ (Berserker):** Blackmetal Battleaxe (+50% Slash Damage buff) |
-| **The Cleric**<br>`AllyDvergrCleric` | 🌿 | **Support / Healer** | **Ability:** Pulses 15 HP/s AoE Heal-over-Time.<br>**Defense:** Wields an Iron Mace. |
-| **The Spellsword**<br>`AllyDvergrSpellswordFire` / `Ice` | 🔥 / ❄️ | **Elite Hybrid** | **Ability:** Casts native Fireball or Icebolt, then rushes in for melee.<br>**Gear:** Bronze (0★) → Iron (1★) → Blackmetal (2★) |
-| **The Elemental Mage**<br>`AllyDvergrMageElemental` | 🌌 | **Arcane Artillery** | **Ability:** Cycles elements every 10s (Fireball, Icebolt, Goblin Shaman Fire). |
+**A Dvergr you tamed from the wild can no longer be struck by you.**
 
----
+| You | It |
+|---|---|
+| **swing at a Dvergr you tamed** | the hit does not land, as it never did on a hired or bred Ally |
+| **strike a wild Dvergr beside your tame ones** | the wild camp is angered; your tame ones are not, and never turn on you |
+| **tame a Dvergr while it is angry** | it calms for good, with no red **!** and no "Kill the Norseman!" |
+| **run the server** | `Tamed Join Player Faction` switches it off with the faction fix |
 
-## 🌳 The Breeding Tree
-
-> [!IMPORTANT]
-> You can't just find an elite unit in the wild—you have to breed one. When two Dvergrs mate, their offspring has a chance to mutate into a higher-tier class based on their parents' genetics.
-
-### 🧬 Tier 1 Mutations (From Vanilla Tames)
-*Combining two base Dvergr tames has a chance to produce a specialized unit.*
-
-* ⛏️ `Rogue` + ⛏️ `Rogue` ➞ **⚔️ Warrior** *(Pure Melee)*
-* ⛏️ `Support Mage` + ⛏️ `Support Mage` ➞ **🌿 Cleric** *(Pure Healing)*
-* ⛏️ `Fire Mage` + ⛏️ `Ice Mage` ➞ **🌌 Elemental Mage** *(Dual Magic)*
-
-### 🧬 Tier 2 Mutations (Hybrids & Elites)
-*Combining different classes passes down their traits into an Elite Hybrid.*
-
-* ⛏️ `Rogue` + ⛏️ `Fire Mage` ➞ **🔥 Fire Spellsword** *(Melee + Fire)*
-* ⛏️ `Rogue` + ⛏️ `Ice Mage` ➞ **❄️ Ice Spellsword** *(Melee + Ice)*
-* ⚔️ `Warrior` + ⚔️ `Warrior` ➞ **🪓 Berserker** *(Ultimate Melee)*
-
-> [!NOTE]
-> *(Note: In the code, offspring that don't trigger the "Special Combo Chance" simply inherit the exact class of one of their parents, maintaining your bloodlines!).*
+🔹 **Tested in game:** 60 checks on a real Valheim 1.0.21 client, including a real hit on a wild Dvergr standing beside a tame one, and confirmed by hand by a tester on Windows
+🔹 **Update together:** the server and every client must run 1.0.13. A mismatched client is turned away at the door.
 
 ---
 
-## ⚙️ Configuration Options
+![ᚾ BEFORE YOU INSTALL · READ THIS](https://img.shields.io/badge/BEFORE_YOU_INSTALL-READ_THIS-b8860b?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNNSAxVjEzTTIgNUw4IDkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Q3YmM3OCIgc3Ryb2tlLXdpZHRoPSIyLjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg%3D%3D)
 
-> Dvergr Allies is highly customizable via the `BepInEx/config/DvergrAllies.cfg` file. You can adjust almost every aspect of the mod in real-time.
+| | If… | Then… |
+|---|---|---|
+| 🤝 | you play on a **server** | put Dvergr Allies on the server **and** on every client, the exact same version. A client on another version is refused with a screen showing both. |
+| 📦 | you install by **hand** | you need BepInEx, Jotunn and **JsonDotNET** (the stats export uses it). A mod manager fetches all three for you. |
+| ⏳ | you want a **wild** Dvergr | feed it until it settles. It takes a long while on purpose: `Taming Time` sets how long. |
+| 🪙 | you want one **now** | buy a **Dvergr Contract** from Haldor (`Contract Cost`) and use it. A tame ally appears beside you. |
+| 🧭 | you run **Valkyrie's Cargo** | Ingvar is left alone. He can never be tamed, bred or counted among your Dvergr. |
+
+---
+
+![ᚹ I · TAME THEM](https://img.shields.io/badge/I-TAME_THEM-2f6f7e?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMyAxM1YxTDggNEwzIDciIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzhjYWZiOCIgc3Ryb2tlLXdpZHRoPSIyLjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg%3D%3D)
+
+**Feed them until they follow. Or hire one.**
+
+| You | It |
+|---|---|
+| **feed a wild Dvergr** `Coins`, `Cooked Meat`, `Sausages` or `Yggdrasil Wood` | it eats, settles, and after long enough is yours (`Taming Items`) |
+| **buy a Dvergr Contract from Haldor** | using it summons a tame Dvergr of a random class, elites included |
+| **press [E] on a tame Dvergr** | order it: follow me, or stay |
+| **press Shift+E** | give it a name |
+| **let it go hungry** | the hover text says so. Keep it fed (`Fed Duration`) |
 
 <details>
-<summary><b>🥩 Taming</b></summary>
+<summary>📖 <b>Read the saga</b> — why they stand still while you feed them</summary>
 
-- **Taming Time:** Time required to tame a wild Dvergr. (Default: `1800s`)
-- **Taming Items:** The prefabs they will eat. (Default: `CookedMeat`, `Coins`, `Sausages`, `YggdrasilWood`)
-- **Fed Duration / Consume Range:** Fine-tune their hunger mechanics and eating distance.
+**Wild Dvergr are made calm.** The Mistlands Dvergr is a touchy neutral: stand near one too long and it turns on you. While untamed, Dvergr Allies switches off that temper, their startled flight, their panic near a campfire and their urge to attack your taming pens, so you can stand beside one and feed it. A wild Dvergr is still a wild Dvergr: it is no ally until it is tame.
+
+**The contract is a gamble.** Every contract draws its class at random from the whole roster, so the elite classes can come straight from Haldor's counter.
+
+</details>
+
+---
+
+![ᛈ II · BREED THEM](https://img.shields.io/badge/II-BREED_THEM-2f6f7e?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMyAxVjEzTTMgMUw2IDRMOSAxTTMgMTNMNiAxMEw5IDEzIiBmaWxsPSJub25lIiBzdHJva2U9IiM4Y2FmYjgiIHN0cm9rZS13aWR0aD0iMi40IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4%3D)
+
+**Pair two tame Dvergr and a child follows. Sometimes it is something new.**
+
+| Parents | Child | |
+|---|---|---|
+| ⛏️ **Rogue** + ⛏️ **Rogue** | ⚔️ **Warrior** | pure melee |
+| ⛏️ **Support Mage** + ⛏️ **Support Mage** | 🌿 **Cleric** | pure healing |
+| ⛏️ **Fire Mage** + ⛏️ **Ice Mage** | 🌌 **Elemental Mage** | dual magic |
+| ⛏️ **Rogue** + ⛏️ **Fire Mage** | 🔥 **Fire Spellsword** | melee and fire |
+| ⛏️ **Rogue** + ⛏️ **Ice Mage** | ❄️ **Ice Spellsword** | melee and ice |
+| ⚔️ **Warrior** + ⚔️ **Warrior** | 🪓 **Berserker** | the ultimate melee |
+
+When the mutation does not come, the child simply has the class of one of its parents, so your bloodlines hold.
+
+<details>
+<summary>📖 <b>Read the saga</b> — how long it takes, and how many is too many</summary>
+
+**A pair needs time and space.** A pregnancy lasts `Pregnancy Duration`; a Dvergr looks for a partner within `Partner Check Range`, every `Update Interval`, and each match has a `Pregnancy Chance` chance to take. Once `Breeding Limit` tame Dvergr stand within 10 m, they stop breeding.
+
+**Luck sets the pace.** `Special Combo Chance` is how often a matching pair mutates; `Level Up Chance` is how often a child is born a star above its best parent, up to `Max Breeding Level`.
+
+**Every Dvergr has a gender.** It is rolled once, shown on the hover text, and a pair needs one of each.
+
+</details>
+
+---
+
+![ᛏ III · THE CLASSES](https://img.shields.io/badge/III-THE_CLASSES-2f6f7e?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNNSAxM1YxTTEgNUw1IDFMOSA1IiBmaWxsPSJub25lIiBzdHJva2U9IiM4Y2FmYjgiIHN0cm9rZS13aWR0aD0iMi40IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4%3D)
+
+**Each class has its own weapons, and its gear grows with its stars.**
+
+| Class | Role | What it does |
+|:---|:---|:---|
+| ⛏️ **Base Dvergr** | foundation | the genetic baseline, with simple weapons |
+| ⚔️ **Warrior** | tank | **0★** Bronze Sword and Buckler · **1★** Iron Sword and Silver Shield · **2★** Blackmetal Battleaxe, with +50% slash damage |
+| 🌿 **Cleric** | healer | pulses an area heal-over-time (15 HP/s) and fights with an Iron Mace |
+| 🔥 ❄️ **Spellsword** | elite hybrid | casts Fireball or Icebolt, then rushes in for melee. Bronze, then Iron, then Blackmetal as it gains stars |
+| 🌌 **Elemental Mage** | artillery | cycles its element every 10 seconds: Fireball, Icebolt, Goblin Shaman fire |
+| 🪓 **Berserker** | ultimate melee | goes into a rage in the fight |
+
+They fight through the game's own monster AI, so hits, aggro and particle effects behave like any other creature's. `Health Multiplier` and `Damage Multiplier` scale the whole roster at once.
+
+---
+
+![ᛉ IV · YOUR SIDE](https://img.shields.io/badge/IV-YOUR_SIDE-2f6f7e?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNNSAxM1YxTTUgNkwxIDJNNSA2TDkgMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOGNhZmI4IiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8%2BPC9zdmc%2B)
+
+**Tame means yours, to the game and to the ballista.**
+
+| The rule | What it means |
+|---|---|
+| 🤝 **Tame joins the Players faction** | every Dvergr you tame, fed or hired or bred, counts as one of your own. Wild ones stay Dverger. |
+| 🛡️ **You cannot strike your own** | a tame Dvergr takes no hit from you and is not angered when you strike a wild one nearby. A wild one can still be struck to anger its camp. |
+| 🏹 **Your ballistas pass them over** | a ballista **you built** aims at the next real enemy instead. Wild Dvergr are still targets. |
+| 🏰 **Outposts stay hostile** | the ballistas that belong to a Dvergr outpost are not yours and are not changed |
+| 🔒 **The server holds the switches** | `Tamed Join Player Faction` and `Spare Allies From Ballistas`, both on by default |
+
+---
+
+![ᚨ V · THE WARBAND REPORT](https://img.shields.io/badge/V-THE_WARBAND_REPORT-2f6f7e?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMyAxM1YxTTMgMUw4IDVNMyA1TDggOSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOGNhZmI4IiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8%2BPC9zdmc%2B)
+
+**Your server tells Discord how your empire is doing.**
+
+Through [BarrkBOT](https://discord.gg/GTTCnGS6Ym), who commands the largest warband, whose bloodlines have taken the heaviest losses, and who got lucky pulling elites out of Haldor's contracts. Deaths and births are recorded as they happen and survive server restarts.
+
+The server writes the stats as JSON to `BepInEx/config/DvergrAllies/`. Clients do no work and write no files. `Enable Stats Export` turns it off.
+
+---
+
+![ᚠ THE TOOLBOX · QUICK START · HOW-TO](https://img.shields.io/badge/THE_TOOLBOX-QUICK_START_%C2%B7_HOW--TO-1b1b1b?style=for-the-badge&labelColor=8b1e1e&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMyAxM1YxTTMgNUw4IDFNMyA5TDggNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZThjMzVhIiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8%2BPC9zdmc%2B)
+
+**First ten minutes:** install on the server and every player → buy a contract from Haldor and use it → press **E** on your new Dvergr and tell it to follow → feed a wild one while you wait.
+
+<details>
+<summary>🛠️ <b>Make taming faster or slower</b></summary>
+
+`Taming Time` is how long a wild Dvergr takes to settle. `Taming Items` is the list of food it will eat. `Consume Range` is how close it must be to eat; raise it if Dvergr get stuck pushing each other.
 
 </details>
 
 <details>
-<summary><b>🧬 Breeding</b></summary>
+<summary>🛠️ <b>Keep the army on a leash</b></summary>
 
-- **Pregnancy Duration:** How long it takes for offspring to spawn. (Default: `600s`)
-- **Breeding Limit:** Max Dvergrs allowed in a `10m` radius before they stop breeding. (Default: `4`)
-- **Pregnancy Chance:** Likelihood of successful mating per interval. (Default: `33%`)
-- **Special Combo Chance:** The chance that a valid genetic pair produces the Hybrid Mutation instead of a normal child. (Default: `25%`)
-- **Level Up Chance:** The chance an offspring is born with `+1` Star. (Default: `10%`)
-- **Max Breeding Level:** Cap the maximum stars they can achieve. (Default: `2 Stars` / Level 3)
+`Max Follow Leash` is how far a Dvergr chases an enemy before it drops the fight and comes back to you.
 
 </details>
 
 <details>
-<summary><b>📈 Stats</b></summary>
+<summary>🛠️ <b>Make contracts cheaper or dearer</b></summary>
 
-- **Health Multiplier:** Global multiplier for your Dvergrs' base health pools.
-- **Damage Multiplier:** Global multiplier applied directly to the physical slash/blunt/pierce damage of all custom Dvergr weapons, and the elemental damage of all Mage staves.
-
-</details>
-
-<details>
-<summary><b>📊 BarrkBOT Export</b></summary>
-
-- **Enable Stats Export:** Writes your Dvergr empire's stats to `BepInEx/config/DvergrAllies/` as JSON, so [BarrkBOT](https://discord.gg/GTTCnGS6Ym) can answer questions about them in Discord. (Default: `On`)
-- **Export Interval:** Seconds between writes. (Default: `60s`) BarrkBOT only checks every 20 minutes, so lowering this buys nothing.
-- **Force Census Unavailable:** *(Testing only — leave `Off`)* Makes the export deliberately report that it couldn't count your Dvergrs, so you can verify the failure path works without breaking anything. Counts are reported as "not measured" rather than zero, your lifetime history keeps recording, and the export says outright that it was forced.
-- Server-side only — clients do no work and write no files.
+`Contract Cost` is the price in coins at Haldor's counter.
 
 </details>
 
 <details>
-<summary><b>🧠 AI & Economy</b></summary>
+<summary>🛠️ <b>I do not want the faction or ballista fix</b></summary>
 
-- **Max Follow Leash:** The maximum distance (in meters) a Dvergr will chase an enemy before dropping aggro and returning to the player they are following. (Default: `40m`)
-- **Contract Cost:** Cost in coins to purchase a Mercenary Contract from Haldor. (Default: `999`)
+Set `Tamed Join Player Faction` or `Spare Allies From Ballistas` to `Off` on the server. Each fix is independent.
 
 </details>
 
-> [!WARNING]
-> **Debugging:** Toggle robust AI, Equipment, and Breeding logs to see exactly what your Dvergrs are thinking, who they are mating with, and what weapons they are equipping.
+<details>
+<summary>🛠️ <b>See what they are thinking</b></summary>
+
+The **5 - Debug** section of the config turns on logs for AI, breeding and equipment, so you can see who is mating with whom and what each Dvergr equipped.
+
+</details>
 
 ---
 
-## 🤝 Compatibility
+![ᚷ MULTIPLAYER · WHO NEEDS WHAT](https://img.shields.io/badge/MULTIPLAYER-WHO_NEEDS_WHAT-1f4e79?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMSAxTDkgMTNNOSAxTDEgMTMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzgzOWRiNSIgc3Ryb2tlLXdpZHRoPSIyLjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg%3D%3D)
 
-- **Valkyrie's Cargo** — Ingvar, the travelling merchant, is a vanilla Dverger under the hood. Dvergr Allies recognises him by that mod's own tag on his save data and strips every taming, breeding and genetics component from him the moment he appears, so **[E] trades with him** as intended - he can never be tamed, petted, renamed, commanded, bred, or counted among your Dvergr. Wild Dvergr are unaffected.
-- **Shadows of Midgard** — your allies carry the `SoMStealthExempt` flag so SoM's stealth AI leaves them to their combat AI; wild, untamed Dvergr are explicitly *not* exempt, so sneaking past them still works.
-- **BalrondIdleActors** — Balrond's actor scripts are stripped from the custom Ally prefabs so your allies fight and follow instead of idling, and the wild-Dvergr AI adjustments are switched off entirely when Balrond is detected so wild NPCs keep their idle behaviours.
+| 🏰 The server | 🤝 Every client | 🚫 A different version |
+|---|---|---|
+| holds the settings, runs the breeding and writes the Discord stats | needs the mod too, to see and command its Dvergr | is refused at the door, with a screen naming both versions |
+
+**Versions:** the server and every client must run the exact same Dvergr Allies version. A new release means everyone updates together.
+
+---
+
+![ᛗ COMPATIBILITY · OTHER MODS](https://img.shields.io/badge/COMPATIBILITY-OTHER_MODS-2e5e3a?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMSAxM1YxTDkgN005IDEzVjFMMSA3IiBmaWxsPSJub25lIiBzdHJva2U9IiM4Y2E2OTIiIHN0cm9rZS13aWR0aD0iMi40IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4%3D)
+
+| Mod | How they get on |
+|---|---|
+| ⚠️ **BalrondIdleActors** | its actor scripts are stripped from the custom Ally prefabs so your allies fight and follow instead of idling. The changes to wild Dvergr are switched off entirely when it is detected, so wild NPCs keep their idle behaviour. |
+| 🧭 **Valkyrie's Cargo** | Ingvar the merchant is a vanilla Dverger underneath. Dvergr Allies recognises him by that mod's own tag and strips every component of its own from him, so **E** trades with him. He can never be tamed, petted, renamed, commanded, bred or counted, and he stays in the Dverger faction. |
+| 🥷 **Shadows of Midgard** | your allies carry the `SoMStealthExempt` flag so its stealth AI leaves them to their combat AI. Wild Dvergr are not exempt, so sneaking past them still works. |
 
 ---
 
-## 🛠️ Installation
+![ᛚ SETTINGS · CONFIGURATION MANAGER · F1](https://img.shields.io/badge/SETTINGS-CONFIGURATION_MANAGER_%C2%B7_F1-b8860b?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMyAxM1YxTDggNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZDdiYzc4IiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8%2BPC9zdmc%2B)
 
-1. Install [BepInEx for Valheim](https://github.com/BepInEx/BepInEx).
-2. Install [Jotunn (The Valheim Library)](https://github.com/Valheim-Modding/Jotunn).
-3. Install **JsonDotNET** — required for the stats export.
-4. Drop `DvergrAllies.dll` into your `BepInEx/plugins/` folder.
-5. Tame a Dvergr and begin your empire!
+<details>
+<summary>🔒 <b>Server-synced</b> — set on the server, locked to admins</summary>
 
-> [!IMPORTANT]
-> **Server and every client must run the exact same DvergrAllies version.** Since 1.0.8 a mismatched client is refused at connection with a screen showing both versions - update everyone together.
+| Section | Setting | Default | What it does |
+|---|---|---|---|
+| Taming | `Taming Time` | `1800` | Time in seconds required to tame a Dvergr. |
+| Taming | `Taming Items` | `CookedMeat,Coins,Sausages,YggdrasilWood` | Comma-separated list of item prefabs Dvergrs will eat to tame/breed. |
+| Taming | `Fed Duration` | `600` | Time in seconds a Dvergr stays fed (not hungry) after eating. |
+| Taming | `Consume Range` | `4` | Distance from which they can consume food. |
+| Breeding | `Pregnancy Duration` | `600` | Time in seconds before a pregnant Dvergr gives birth. |
+| Breeding | `Breeding Limit` | `4` | Maximum number of Dvergrs in a 10m radius before they stop breeding. |
+| Breeding | `Special Combo Chance` | `25` | Percentage chance (0-100) to breed a special combo variant if parents are compatible. |
+| Breeding | `Pregnancy Chance` | `0.33` | Chance (0.0 to 1.0) of getting pregnant when conditions are met. |
+| Breeding | `Partner Check Range` | `10` | Distance within which to look for a partner. |
+| Breeding | `Update Interval` | `10` | How often (in seconds) the breeding logic checks for partners/pregnancy. |
+| Breeding | `Level Up Chance` | `10` | Percentage chance (0-100) for offspring to gain +1 level (star) above their highest level parent. |
+| Breeding | `Max Breeding Level` | `3` | Maximum level (3 = 2 stars) a Dvergr can reach through breeding. |
+| AI | `Max Follow Leash` | `40` | Max distance (meters) a Dvergr can chase an enemy before dropping aggro to return to the player they are following. |
+| Faction | `Tamed Join Player Faction` | `On` | A tamed Dvergr switches from the Dverger faction to the Players faction, as the contract and bred Ally Dvergrs already are, and players can no longer hit it by accident. |
+| Faction | `Spare Allies From Ballistas` | `On` | Ballistas built by a player pass over tamed Dvergrs (and Players-faction Ally Dvergrs). |
+| Economy | `Contract Cost` | `999` | Cost in coins to purchase a Dvergr Contract from Haldor or Recruiter. |
+| Stats | `Health Multiplier` | `1.0` | Multiplier applied to base health of Ally Dvergrs. |
+| Stats | `Damage Multiplier` | `1.0` | Multiplier applied to base damage of Ally Dvergrs. |
+
+The **5 - Debug** switches are server-synced as well.
+
+</details>
+
+<details>
+<summary>🖥️ <b>Local</b> — your own, never synced</summary>
+
+| Section | Setting | Default | What it does |
+|---|---|---|---|
+| BarrkBOT Export | `Enable Stats Export` | `On` | Periodically writes Dvergr population/ownership stats to BepInEx/config/DvergrAllies/ as JSON for BarrkBOT to read. |
+| BarrkBOT Export | `Export Interval` | `60` | Seconds between stats exports. |
+| BarrkBOT Export | `Force Census Unavailable` | `Off` | TESTING ONLY. Forces the export to report 'census_unavailable' as if the world could not be scanned, so the failure path can be exercised on a live server without breaking anything. |
+
+</details>
 
 ---
-join the Mists of Avalor Open BETA find it only on [Hexium ![Hexium Logo](data:image/png;base64,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)](https://valheim.hexium.gg/mods/Wubarrk/Mists_of_Avalor_BETA)
 
-<br>
-<small>
+![ᛟ CREDITS · THANK YOU](https://img.shields.io/badge/CREDITS-THANK_YOU-1b1b1b?style=for-the-badge&labelColor=c9a227&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMiAxM0w4IDZMNSAyTDIgNkw4IDEzIiBmaWxsPSJub25lIiBzdHJva2U9IiMxYjFiMWIiIHN0cm9rZS13aWR0aD0iMi40IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4%3D)
 
-**License:** MIT — use, modify, and redistribute freely, including commercially; just keep the copyright notice. See `LICENSE.md` for the full text.
+**Needs:** BepInExPack for Valheim, Jotunn and JsonDotNET · **Stats** read by BarrkBOT · *Made by Wubarrk.* · **License:** MIT, see `LICENSE.md`
 
-</small>
+Join the Mists of Avalor Open BETA, found only on [Hexium](https://valheim.hexium.gg/mods/Wubarrk/Mists_of_Avalor_BETA).
+
+<details>
+<summary>ᛟ <b>The runes on this page</b> — every banner is sealed with one</summary>
+
+| Rune | Means | Seals |
+|---|---|---|
+| ![ᛒ Berkano](https://img.shields.io/badge/-BERKANO-2f6f7e?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMyAxVjEzTTMgMUw4IDRMMyA3TDggMTBMMyAxMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOGNhZmI4IiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8%2BPC9zdmc%2B) | the birch, growth | the name: birth, bloodlines, growth |
+| ![ᛞ Dagaz](https://img.shields.io/badge/-DAGAZ-8b1e1e?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMSAyVjEyTDkgMlYxMkwxIDIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2JmODM4MyIgc3Ryb2tlLXdpZHRoPSIyLjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg%3D%3D) | dawn, a new day | what is new |
+| ![ᚾ Nauthiz](https://img.shields.io/badge/-NAUTHIZ-b8860b?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNNSAxVjEzTTIgNUw4IDkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Q3YmM3OCIgc3Ryb2tlLXdpZHRoPSIyLjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg%3D%3D) | need, what must be | what you need to know first |
+| ![ᚹ Wunjo](https://img.shields.io/badge/-WUNJO-2f6f7e?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMyAxM1YxTDggNEwzIDciIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzhjYWZiOCIgc3Ryb2tlLXdpZHRoPSIyLjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg%3D%3D) | joy, fellowship | taming and contracts |
+| ![ᛈ Perthro](https://img.shields.io/badge/-PERTHRO-2f6f7e?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMyAxVjEzTTMgMUw2IDRMOSAxTTMgMTNMNiAxMEw5IDEzIiBmaWxsPSJub25lIiBzdHJva2U9IiM4Y2FmYjgiIHN0cm9rZS13aWR0aD0iMi40IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4%3D) | the lot cup, chance | breeding and mutations |
+| ![ᛏ Tiwaz](https://img.shields.io/badge/-TIWAZ-2f6f7e?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNNSAxM1YxTTEgNUw1IDFMOSA1IiBmaWxsPSJub25lIiBzdHJva2U9IiM4Y2FmYjgiIHN0cm9rZS13aWR0aD0iMi40IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4%3D) | Tyr, law and justice | the classes |
+| ![ᛉ Algiz](https://img.shields.io/badge/-ALGIZ-2f6f7e?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNNSAxM1YxTTUgNkwxIDJNNSA2TDkgMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOGNhZmI4IiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8%2BPC9zdmc%2B) | the elk, protection | your side: faction and ballistas |
+| ![ᚨ Ansuz](https://img.shields.io/badge/-ANSUZ-2f6f7e?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMyAxM1YxTTMgMUw4IDVNMyA1TDggOSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOGNhZmI4IiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8%2BPC9zdmc%2B) | Odin's word, a message | the warband report to Discord |
+| ![ᚠ Fehu](https://img.shields.io/badge/-FEHU-1b1b1b?style=for-the-badge&labelColor=8b1e1e&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMyAxM1YxTTMgNUw4IDFNMyA5TDggNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZThjMzVhIiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8%2BPC9zdmc%2B) | cattle, wealth earned | the toolbox |
+| ![ᚷ Gebo](https://img.shields.io/badge/-GEBO-1f4e79?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMSAxTDkgMTNNOSAxTDEgMTMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzgzOWRiNSIgc3Ryb2tlLXdpZHRoPSIyLjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg%3D%3D) | the gift, give and take | multiplayer |
+| ![ᛗ Mannaz](https://img.shields.io/badge/-MANNAZ-2e5e3a?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMSAxM1YxTDkgN005IDEzVjFMMSA3IiBmaWxsPSJub25lIiBzdHJva2U9IiM4Y2E2OTIiIHN0cm9rZS13aWR0aD0iMi40IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4%3D) | humankind, the folk | other mods |
+| ![ᛚ Laguz](https://img.shields.io/badge/-LAGUZ-b8860b?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMyAxM1YxTDggNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZDdiYzc4IiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8%2BPC9zdmc%2B) | water, the flow | the settings |
+| ![ᛟ Othala](https://img.shields.io/badge/-OTHALA-1b1b1b?style=for-the-badge&labelColor=c9a227&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMiAxM0w4IDZMNSAyTDIgNkw4IDEzIiBmaWxsPSJub25lIiBzdHJva2U9IiMxYjFiMWIiIHN0cm9rZS13aWR0aD0iMi40IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4%3D) | the homestead, heritage | the credits |
+
+</details>

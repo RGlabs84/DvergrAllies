@@ -20,7 +20,7 @@ namespace DvergrAllies
     // What that costs without this file, in the order a player notices:
     //  1. Tameable is an Interactable. Ours sits on the prefab; CargoMerchant (also Interactable) is added
     //     at runtime and so sorts LAST, and Player.Interact takes the FIRST match of
-    //     GetComponentInParent<Interactable>() (assembly_valheim.decompiled.cs:13722, 1.0.7). He is tamed
+    //     GetComponentInParent<Interactable>() (vanilla Player.Interact). He is tamed
     //     (point 2) and MakePrefabTamable sets m_commandable, so [E] on Ingvar is Tameable.Interact's
     //     Command branch (:19170-19180) - follow me / stay - Shift+E opens the rename box, and the trade
     //     never opens.
@@ -55,8 +55,8 @@ namespace DvergrAllies
         // Informational only (one log line at startup); see the header for why detection does not use it.
         public static bool HasValkyriesCargo;
 
-        // Tameable.Awake registers these on the creature's ZNetView (assembly_valheim.decompiled.cs:19067-19069,
-        // 1.0.7; identical on the dedicated-server build). A handler left behind on a destroyed component still
+        // Tameable.Awake registers these on the creature's ZNetView (vanilla; identical on the
+        // dedicated-server build). A handler left behind on a destroyed component still
         // runs when the RPC arrives. Nothing on a same-version peer sends them (the only senders are a live
         // Tameable's Interact/UseItem, and every peer has stripped his), and NetworkCompatibility is
         // VersionStrictness.Patch precisely so a pre-1.0.8 client with a live Tameable on him cannot join - but

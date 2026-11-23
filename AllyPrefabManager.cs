@@ -137,6 +137,11 @@ namespace DvergrAllies
             if (prefab.GetComponent<DvergrGenetics>() == null)
                 prefab.AddComponent<DvergrGenetics>();
 
+            // Wild bodies stay Dverger until tamed, then follow Character.IsTamed() into the Players faction.
+            // Ally prefabs are Players from birth and need no sync.
+            if (prefab.GetComponent<DvergrFactionSync>() == null)
+                prefab.AddComponent<DvergrFactionSync>();
+
             // Configure MonsterAI for eating and disable passive-aggressiveness
             MonsterAI monsterAI = prefab.GetComponent<MonsterAI>();
             if (monsterAI != null)

@@ -3,9 +3,22 @@
     <TargetFramework>net48</TargetFramework>
     <AssemblyName>DvergrAllies</AssemblyName>
     <Description>A Valheim mod that allows taming and crossbreeding Dvergrs.</Description>
-    <Version>1.0.8</Version>
+    <Version>1.0.13</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
+    <!-- CS0436: the assembly publicizer's own IgnoresAccessChecksToAttribute (a source file in its content files, compiled
+         into this DLL) meets the public copy inside MonoMod.Utils, which BepInEx.Core brings in. The compiler picks ours and
+         warns; the two are the same attribute and the warning is only in the generated AssemblyInfo.cs. Same suppression as
+         Runic and BlightedHeart. It is scoped to this one code, so any other warning still shows. -->
+    <NoWarn>$(NoWarn);CS0436</NoWarn>
+    <!-- Every package ships the PDB that matches its DLL (owner, 2026-11-20): portable and deterministic, with the builder's folders
+         mapped to neutral names and SourceLink off (it embeds the home path and the git commit). Without PathMap the DLL alone leaks
+         the path of its own PDB. libs-Tools/pdb_match.py checks the pair before a fold. -->
+    <Deterministic>true</Deterministic>
+    <PathMap>$(MSBuildProjectDirectory)=DvergrAllies,$(NuGetPackageRoot)=nuget/</PathMap>
+    <DebugType>portable</DebugType>
+    <EnableSourceLink>false</EnableSourceLink>
+    <EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>
     <RestoreAdditionalProjectSources>
       https://api.nuget.org/v3/index.json;
       https://nuget.bepinex.dev/v3/index.json
@@ -33,7 +46,7 @@
     <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1" PrivateAssets="all" />
   </ItemGroup>
 
-  <!-- ALL reference assemblies come from the SHARED c:\WubarrkCODING\libs-Tools folder, never from a per-project
+  <!-- ALL reference assemblies come from the SHARED c:\WubarrkCODING\ValheimMods\libs-Tools folder, never from a per-project
        libs\ copy. That is the standing rule across every mod in this solution root. -->
   <ItemGroup>
     <Reference Include="assembly_valheim" Publicize="true">

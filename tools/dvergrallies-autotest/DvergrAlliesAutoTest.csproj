@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- DvergrAlliesAutoTest: the unattended in-game test driver for DvergrAllies. Never ships (DvergrAllies.csproj excludes tools/**).
+       Ported from ThunderFeet's tools/thunderfeet-autotest (itself from Runic's, Better Continents' BCAutoTest and DwarvenDefender's DDPlaytest).
+       Build (always through the RAM gate):
+         ~/valheim-testbed/heavy.sh 4G dvergr-autotest-build dotnet build tools/dvergrallies-autotest/DvergrAlliesAutoTest.csproj -c Release
+       Output: tools/dvergrallies-autotest/bin/DvergrAlliesAutoTest.dll -->
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>DvergrAlliesAutoTest</AssemblyName>
+    <RootNamespace>DvergrAlliesAutoTest</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>false</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Deterministic>true</Deterministic>
+    <DebugType>portable</DebugType>
+    <OutputPath>bin/</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <NoWarn>$(NoWarn);CS0618;CS0649;CS8632;CS0436</NoWarn>
+    <LibsTools Condition="'$(LibsTools)' == '' And Exists('$(MSBuildProjectDirectory)/../../../libs-Tools/assembly_valheim.dll')">$(MSBuildProjectDirectory)/../../../libs-Tools</LibsTools>
+    <LibsTools Condition="'$(LibsTools)' == ''">$(HOME)/WubarrkCODING/libs-Tools</LibsTools>
+    <ModDll Condition="'$(ModDll)' == ''">$(MSBuildProjectDirectory)/../../bin/Release/net48/DvergrAllies.dll</ModDll>
+    <JotunnDll Condition="'$(JotunnDll)' == ''">$(MSBuildProjectDirectory)/../../bin/Release/net48/Jotunn.dll</JotunnDll>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- DvergrAllies itself, publicized: the driver reads its components, ConfigManager and ValkyriesCargoCompat directly, so a
+         rename in the mod is a BUILD error here, not a silent no-op. -->
+    <Reference Include="DvergrAllies"><HintPath>$(ModDll)</HintPath><Publicize>true</Publicize><Private>false</Private></Reference>
+    <Reference Include="Jotunn"><HintPath>$(JotunnDll)</HintPath><Private>false</Private></Reference>
+    <Reference Include="assembly_valheim"><HintPath>$(LibsTools)/assembly_valheim.dll</HintPath><Publicize>true</Publicize><Private>false</Private></Reference>
+    <Reference Include="assembly_utils"><HintPath>$(LibsTools)/assembly_utils.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="assembly_guiutils"><HintPath>$(LibsTools)/assembly_guiutils.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Splatform"><HintPath>$(LibsTools)/Splatform.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="BepInEx"><HintPath>$(LibsTools)/BepInEx.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="0Harmony"><HintPath>$(LibsTools)/0Harmony.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="netstandard"><HintPath>$(LibsTools)/netstandard.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine"><HintPath>$(LibsTools)/UnityEngine.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>$(LibsTools)/UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.PhysicsModule"><HintPath>$(LibsTools)/UnityEngine.PhysicsModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.AudioModule"><HintPath>$(LibsTools)/UnityEngine.AudioModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.UI"><HintPath>$(LibsTools)/UnityEngine.UI.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Unity.TextMeshPro"><HintPath>$(LibsTools)/Unity.TextMeshPro.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+</Project>
