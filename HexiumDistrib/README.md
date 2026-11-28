@@ -3,7 +3,7 @@
 # ⚒️ Dvergr Allies
 
 ![ᛒ DVERGR ALLIES · TAME · BREED · COMMAND](https://img.shields.io/badge/DVERGR_ALLIES-TAME_%C2%B7_BREED_%C2%B7_COMMAND-2f6f7e?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMyAxVjEzTTMgMUw4IDRMMyA3TDggMTBMMyAxMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOGNhZmI4IiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8%2BPC9zdmc%2B)
-![VERSION · 1.0.13](https://img.shields.io/badge/VERSION-1.0.13-8b1e1e?style=for-the-badge&labelColor=1b1b1b)
+![VERSION · 1.0.14](https://img.shields.io/badge/VERSION-1.0.14-8b1e1e?style=for-the-badge&labelColor=1b1b1b)
 ![CLIENT + SERVER · EVERYONE MUST MATCH](https://img.shields.io/badge/CLIENT_%2B_SERVER-EVERYONE_MUST_MATCH-1f4e79?style=for-the-badge&labelColor=1b1b1b)
 
 | ⚒️ **6** | 🪙 **999** | ⭐ **2★** | 🔒 **Synced** |
@@ -20,19 +20,18 @@ Your army grows through its bloodlines, its gear upgrades with its stars, and a 
 
 ---
 
-![ᛞ NEW IN 1.0.13 · HANDS OFF YOUR OWN](https://img.shields.io/badge/NEW_IN_1.0.13-HANDS_OFF_YOUR_OWN-8b1e1e?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMSAyVjEyTDkgMlYxMkwxIDIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2JmODM4MyIgc3Ryb2tlLXdpZHRoPSIyLjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg%3D%3D)
+![ᛞ NEW IN 1.0.14 · THEY HOLD THE LINE](https://img.shields.io/badge/NEW_IN_1.0.14-THEY_HOLD_THE_LINE-8b1e1e?style=for-the-badge&labelColor=1b1b1b&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xIC0xIDEyIDE2Ij48cGF0aCBkPSJNMSAyVjEyTDkgMlYxMkwxIDIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2JmODM4MyIgc3Ryb2tlLXdpZHRoPSIyLjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg%3D%3D)
 
-**A Dvergr you tamed from the wild can no longer be struck by you.**
+**Your Dvergr stand and fight, come back when they chase too far, and stay where you put them.**
 
 | You | It |
 |---|---|
-| **swing at a Dvergr you tamed** | the hit does not land, as it never did on a hired or bred Ally |
-| **strike a wild Dvergr beside your tame ones** | the wild camp is angered; your tame ones are not, and never turn on you |
-| **tame a Dvergr while it is angry** | it calms for good, with no red **!** and no "Kill the Norseman!" |
-| **run the server** | `Tamed Join Player Faction` switches it off with the faction fix |
+| **watch a tamed Dvergr take hits it can't answer** | it stands its ground instead of running off until it has gone 20 seconds unhurt |
+| **let one chase an enemy too far** | past `Max Follow Leash` it drops the fight and comes back, and only re-engages once it is well inside again. The leash now really works, and on wild Dvergr you tamed too |
+| **tell one to stay** | the leash is measured from its post, and it no longer shuffles about every moment while it waits |
+| **want the old nerves back** | `Flee When Hurt And Stuck` on the server restores vanilla's flight |
 
-🔹 **Tested in game:** 60 checks on a real Valheim 1.0.21 client, including a real hit on a wild Dvergr standing beside a tame one, and confirmed by hand by a tester on Windows
-🔹 **Update together:** the server and every client must run 1.0.13. A mismatched client is turned away at the door.
+🔹 **Update together:** the server and every client must run 1.0.14. A mismatched client is turned away at the door.
 
 ---
 
@@ -154,7 +153,7 @@ The server writes the stats as JSON to `BepInEx/config/DvergrAllies/`. Clients d
 <details>
 <summary>🛠️ <b>Keep the army on a leash</b></summary>
 
-`Max Follow Leash` is how far a Dvergr chases an enemy before it drops the fight and comes back to you.
+`Max Follow Leash` is how far a tamed Dvergr may get from you, or from its post when told to stay, before it drops the fight and comes back. It fights again once it is back inside 60% of that. 0 turns the leash off.
 
 </details>
 
@@ -220,7 +219,8 @@ The **5 - Debug** section of the config turns on logs for AI, breeding and equip
 | Breeding | `Update Interval` | `10` | How often (in seconds) the breeding logic checks for partners/pregnancy. |
 | Breeding | `Level Up Chance` | `10` | Percentage chance (0-100) for offspring to gain +1 level (star) above their highest level parent. |
 | Breeding | `Max Breeding Level` | `3` | Maximum level (3 = 2 stars) a Dvergr can reach through breeding. |
-| AI | `Max Follow Leash` | `40` | Max distance (meters) a Dvergr can chase an enemy before dropping aggro to return to the player they are following. |
+| AI | `Max Follow Leash` | `40` | How far (meters) a tamed Dvergr may get from the player it follows - or from its post, when told to stay - before it drops its target and comes back. |
+| AI | `Flee When Hurt And Stuck` | `Off` | Vanilla makes a Dvergr run away while it is being hurt and has not landed an attack for 30 seconds, and keep running until it has gone 20 seconds unhurt. |
 | Faction | `Tamed Join Player Faction` | `On` | A tamed Dvergr switches from the Dverger faction to the Players faction, as the contract and bred Ally Dvergrs already are, and players can no longer hit it by accident. |
 | Faction | `Spare Allies From Ballistas` | `On` | Ballistas built by a player pass over tamed Dvergrs (and Players-faction Ally Dvergrs). |
 | Economy | `Contract Cost` | `999` | Cost in coins to purchase a Dvergr Contract from Haldor or Recruiter. |

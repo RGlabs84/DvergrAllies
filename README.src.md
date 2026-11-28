@@ -24,18 +24,17 @@ Your army grows through its bloodlines, its gear upgrades with its stars, and a 
 
 ---
 
-{{rune ᛞ | NEW IN {{version}} | HANDS OFF YOUR OWN | 8b1e1e}}
+{{rune ᛞ | NEW IN {{version}} | THEY HOLD THE LINE | 8b1e1e}}
 
-**A Dvergr you tamed from the wild can no longer be struck by you.**
+**Your Dvergr stand and fight, come back when they chase too far, and stay where you put them.**
 
 | You | It |
 |---|---|
-| **swing at a Dvergr you tamed** | the hit does not land, as it never did on a hired or bred Ally |
-| **strike a wild Dvergr beside your tame ones** | the wild camp is angered; your tame ones are not, and never turn on you |
-| **tame a Dvergr while it is angry** | it calms for good, with no red **!** and no "Kill the Norseman!" |
-| **run the server** | {{key Tamed Join Player Faction}} switches it off with the faction fix |
+| **watch a tamed Dvergr take hits it can't answer** | it stands its ground instead of running off until it has gone 20 seconds unhurt |
+| **let one chase an enemy too far** | past {{key Max Follow Leash}} it drops the fight and comes back, and only re-engages once it is well inside again. The leash now really works, and on wild Dvergr you tamed too |
+| **tell one to stay** | the leash is measured from its post, and it no longer shuffles about every moment while it waits |
+| **want the old nerves back** | {{key Flee When Hurt And Stuck}} on the server restores vanilla's flight |
 
-🔹 **Tested in game:** 60 checks on a real Valheim 1.0.21 client, including a real hit on a wild Dvergr standing beside a tame one, and confirmed by hand by a tester on Windows
 🔹 **Update together:** the server and every client must run {{version}}. A mismatched client is turned away at the door.
 
 ---
@@ -158,7 +157,7 @@ The server writes the stats as JSON to `BepInEx/config/DvergrAllies/`. Clients d
 <details>
 <summary>🛠️ <b>Keep the army on a leash</b></summary>
 
-{{key Max Follow Leash}} is how far a Dvergr chases an enemy before it drops the fight and comes back to you.
+{{key Max Follow Leash}} is how far a tamed Dvergr may get from you, or from its post when told to stay, before it drops the fight and comes back. It fights again once it is back inside 60% of that. 0 turns the leash off.
 
 </details>
 

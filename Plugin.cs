@@ -22,7 +22,7 @@ namespace DvergrAllies
     {
         public const string PluginGUID = "wubarrk.dvergrallies";
         public const string PluginName = "DvergrAllies";
-        public const string PluginVersion = "1.0.13";
+        public const string PluginVersion = "1.0.14";
 
         public static bool HasBalrondIdleActors;
 

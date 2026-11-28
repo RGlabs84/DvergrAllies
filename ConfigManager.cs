@@ -23,6 +23,7 @@ namespace DvergrAllies
 
         // Leash Settings
         public static ConfigEntry<float> MaxFollowLeash;
+        public static ConfigEntry<bool> FleeWhenHurtAndStuck;
 
         // Faction & defences
         public static ConfigEntry<bool> TamedJoinPlayerFaction;
@@ -92,7 +93,8 @@ namespace DvergrAllies
             LevelUpChance = config.Bind("2 - Breeding", "Level Up Chance", 10f, SyncedConfig("Percentage chance (0-100) for offspring to gain +1 level (star) above their highest level parent."));
             MaxBreedingLevel = config.Bind("2 - Breeding", "Max Breeding Level", 3, SyncedConfig("Maximum level (3 = 2 stars) a Dvergr can reach through breeding."));
 
-            MaxFollowLeash = config.Bind("2.5 - AI", "Max Follow Leash", 40f, SyncedConfig("Max distance (meters) a Dvergr can chase an enemy before dropping aggro to return to the player they are following."));
+            MaxFollowLeash = config.Bind("2.5 - AI", "Max Follow Leash", 40f, SyncedConfig("How far (meters) a tamed Dvergr may get from the player it follows - or from its post, when told to stay - before it drops its target and comes back. It fights again once back inside 60% of this. 0 = no leash."));
+            FleeWhenHurtAndStuck = config.Bind("2.5 - AI", "Flee When Hurt And Stuck", false, SyncedConfig("Vanilla makes a Dvergr run away while it is being hurt and has not landed an attack for 30 seconds, and keep running until it has gone 20 seconds unhurt. Off (default): tamed Dvergr stand and fight. On: the vanilla behaviour. Wild Dvergr always keep vanilla's."));
 
             TamedJoinPlayerFaction = config.Bind("2.6 - Faction", "Tamed Join Player Faction", true, SyncedConfig("A tamed Dvergr switches from the Dverger faction to the Players faction, as the contract and bred Ally Dvergrs already are, and players can no longer hit it by accident. Untamed ones stay Dverger and can still be struck to anger them."));
             SpareAlliesFromBallistas = config.Bind("2.6 - Faction", "Spare Allies From Ballistas", true, SyncedConfig("Ballistas built by a player pass over tamed Dvergrs (and Players-faction Ally Dvergrs). Wild Dvergrs and ballistas that are not player-built are unaffected."));

@@ -3,7 +3,7 @@
     <TargetFramework>net48</TargetFramework>
     <AssemblyName>DvergrAllies</AssemblyName>
     <Description>A Valheim mod that allows taming and crossbreeding Dvergrs.</Description>
-    <Version>1.0.13</Version>
+    <Version>1.0.14</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <!-- CS0436: the assembly publicizer's own IgnoresAccessChecksToAttribute (a source file in its content files, compiled

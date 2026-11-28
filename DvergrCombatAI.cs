@@ -68,7 +68,10 @@ namespace DvergrAllies
                 // Full charge, never circle, no random wandering during combat
                 m_monsterAI.m_circulateWhileCharging = false;
                 m_monsterAI.m_circulateWhileChargingFlying = false;
-                m_monsterAI.m_randomMoveInterval = 0f;
+                // 1.0.14: m_randomMoveInterval is no longer touched (was 0 here, 10 ranged, 5 cleric). It is only
+                // read by BaseAI.RandomMovement - the IDLE wander around a stay post - never by charging, so 0 did not
+                // stop wandering in combat, it made a posted Dvergr pick a new spot every frame ("won't stay put").
+                // The prefab's own 30 s interval and 3 m range stand.
                 m_monsterAI.m_randomCircleInterval = 0f;
                 m_monsterAI.m_alertRange = 30f;
             }
@@ -77,13 +80,11 @@ namespace DvergrAllies
                 // Stand ground and shoot, don't circle like a chicken
                 m_monsterAI.m_circulateWhileCharging = false;
                 m_monsterAI.m_circulateWhileChargingFlying = false;
-                m_monsterAI.m_randomMoveInterval = 10f; 
             }
             else if (IsClericClass)
             {
                 // Cleric should STAY BACK and heal, not charge into melee
                 m_monsterAI.m_circulateWhileCharging = false;
-                m_monsterAI.m_randomMoveInterval = 5f;
                 m_monsterAI.m_randomCircleInterval = 5f;
                 m_monsterAI.m_alertRange = 30f;
             }
@@ -120,21 +121,8 @@ namespace DvergrAllies
                 m_monsterAI.m_circulateWhileCharging = false;
             }
 
-            // Custom Leash Logic
-            GameObject followTarget = m_monsterAI.GetFollowTarget();
-            if (followTarget != null)
-            {
-                Character enemy = m_monsterAI.GetTargetCreature();
-                if (enemy != null)
-                {
-                    float distToLeader = Vector3.Distance(transform.position, followTarget.transform.position);
-                    if (distToLeader > ConfigManager.MaxFollowLeash.Value)
-                    {
-                        m_monsterAI.SetTarget(null);
-                        ConfigManager.LogAI($"[Leash] {gameObject.name} strayed too far ({distToLeader:F1}m > {ConfigManager.MaxFollowLeash.Value}m), dropping aggro to return to leader.");
-                    }
-                }
-            }
+            // The leash moved to DvergrAllyLeash (1.0.14): the one here called SetTarget(null), which vanilla ignores,
+            // and it only ever ran on Ally prefabs.
 
             // Custom Cleric Healing Logic
             if (IsClericClass)

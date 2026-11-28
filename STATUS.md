@@ -1,11 +1,15 @@
 <!-- CHECKPOINT -->
-- **Updated:** 2026-11-23
-- **Current task:** none open. 1.0.13 (no friendly fire on tamed wild Dvergr) is live on Hexium (upload id 523) and Thunderstore, both downloaded back and compared (Thunderstore 7 of 7 files identical; Hexium 6 of 7, only its rewritten manifest.json differs).
-- **Next step:** when the next change starts, bump manifest, csproj `<Version>` and `Plugin.cs` PluginVersion together; run `~/valheim-testbed/heavy.sh 10G dvergrallies-client tools/dvergrallies-autotest/run-autotest.sh` (60 checks at 1.0.13), then `python3 -I tools/fold-package.py --check-badges`.
-- **Blocked on:** nothing.
-- **Files in progress:** none. main = `v1.0.13` on github.com/RGlabs84/DvergrAllies, with a GitHub release carrying the shipped zip.
-- **Open questions for the owner:**
-  - 1.0.13's release gate was not complete: no server smoke test (no `tools/server-smoke.sh` here; BlightedHeart's can be ported), no DESIGN.md for a design check, no load of a 1.0.12 world, no two-player run.
+- **Updated:** 2026-11-27 23:30
+- **Current task:** 1.0.14 BUILT + FOLDED, NOT published, NOT committed. Owner report: Dvergr too frightened for too long, ignore "stay", leash doubtful.
+  Causes found (decompile 1.0.31): (1) vanilla m_fleeIfHurtWhenTargetCantBeReached (MonsterAI.cs:436) never turned off; (2) the leash called
+  SetTarget(null), a vanilla no-op (MonsterAI.cs:192-194), and existed only on Ally prefabs; (3) melee m_randomMoveInterval = 0 (cleric 5, ranged 10)
+  made posted Dvergr pick a new idle spot every frame. Fix: new DvergrAllyLeash.cs (UpdateAI prefix, tamed ours only: flee off unless
+  "Flee When Hurt And Stuck", real leash from leader OR stay post with 60% re-engage), old leash + interval overrides removed.
+- **Checks:** build 0/0; refcheck OK client + server (3380 refs, 10 targets); fold OK (zip sha256 4c92cb12...). New autotest phase L (L1-L7) compiles; NOT RUN.
+- **Next step:** owner's go for `~/valheim-testbed/heavy.sh 10G dvergrallies-client tools/dvergrallies-autotest/run-autotest.sh` (one game window; DA_AUTOTEST_ONLY=L for just the new phase), then commit + publish.
+- **Blocked on:** the owner's go for the game window.
+- **Files in progress:** DvergrAllyLeash.cs, DvergrCombatAI.cs, ConfigManager.cs, Phases.cs/AutoTest.cs (phase L), README.src.md, CHANGELOG, versions 1.0.14.
+- **Open questions for the owner:** none beyond the test go. VersionStrictness.Patch: server and every client must move to 1.0.14 together.
 <!-- /CHECKPOINT -->
 
 # DvergrAllies status

@@ -1,6 +1,6 @@
 {
     "name": "DvergrAllies",
-    "version_number": "1.0.13",
+    "version_number": "1.0.14",
     "website_url": "https://ravenirongames.com/",
     "description": "Tame, breed, and lead an army of custom Dvergr Allies! Features 4 custom classes (Warrior, Cleric, Spellsword, Elemental Mage), breeding genetics, star-level weapon scaling, and native combat AI.",
     "dependencies": [

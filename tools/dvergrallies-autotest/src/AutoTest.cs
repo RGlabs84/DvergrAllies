@@ -269,6 +269,7 @@ namespace DvergrAlliesAutoTest
                 ("H", "player hits: a tame Dvergr cannot be struck or dragged into a fight, a wild one can", PhaseH),
                 ("C", "the contract path: a consumed Dvergr Contract gives a tame Players-faction Ally", PhaseC),
                 ("B", "ballistas: a player-built ballista passes over tame Dvergr, wild ones stay targets", PhaseB),
+                ("L", "leash, fear, stay: the leash drops a target, tamed ones stand and fight, a post is kept", PhaseL),
             };
             // DA_AUTOTEST_ONLY=TB (phase letters) runs only those phases after A and W.
             string only = Environment.GetEnvironmentVariable("DA_AUTOTEST_ONLY");

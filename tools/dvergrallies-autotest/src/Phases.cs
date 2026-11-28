@@ -376,6 +376,102 @@ namespace DvergrAlliesAutoTest
             }
         }
 
+        // ------------------------------------------------------------------------------------------ L: leash, fear, stay (1.0.14)
+
+        static MonsterAI MAI(GameObject go) => go != null ? go.GetComponent<MonsterAI>() : null;
+
+        IEnumerator PhaseL()
+        {
+            Vector3 side = Vector3.Cross(Vector3.up, Fwd).normalized;
+            Vector3 home = Origin + Fwd * 6f;
+            GameObject wild = null, tame = null, warrior = null, foe = null;
+            float leash = ConfigManager.MaxFollowLeash.Value;
+            try
+            {
+                // L1-L2: the hurt-and-stuck flee is off for a tamed Dvergr, on (vanilla) for a wild one, and the setting brings it back.
+                wild = Stand("Dverger", home - side * 3f, freeze: false);
+                tame = Stand("Dverger", home + side * 3f, freeze: false);
+                if (wild == null || tame == null) { Result("FAIL", "spawn the L scene", "Dverger not found"); yield break; }
+                Tame(tame);
+                yield return WaitFor(() => Ch(tame).IsTamed() && !MAI(tame).m_fleeIfHurtWhenTargetCantBeReached, 3f);
+                Check(waitOk, "L1 a tamed Dverger does not flee when hurt and stuck",
+                    $"tamed {Ch(tame).IsTamed()}, flee flag {MAI(tame).m_fleeIfHurtWhenTargetCantBeReached}");
+                Check(MAI(wild).m_fleeIfHurtWhenTargetCantBeReached, "L2 control: a wild Dverger keeps vanilla's flee",
+                    $"flee flag {MAI(wild).m_fleeIfHurtWhenTargetCantBeReached}");
+                ConfigManager.FleeWhenHurtAndStuck.Value = true;
+                try
+                {
+                    yield return WaitFor(() => MAI(tame).m_fleeIfHurtWhenTargetCantBeReached, 2f);
+                    Check(waitOk, "L2b setting on: the tamed one flees like vanilla again", $"flee flag {MAI(tame).m_fleeIfHurtWhenTargetCantBeReached}");
+                }
+                finally { ConfigManager.FleeWhenHurtAndStuck.Value = false; }
+                Gone(wild); wild = null;
+
+                // L3-L4: following the player, put it past the leash with a target: the target is dropped and STAYS dropped
+                // while it is outside 60% of the leash (the old leash called SetTarget(null), a vanilla no-op).
+                MonsterAI ai = MAI(tame);
+                ai.SetFollowTarget(Player.m_localPlayer.gameObject);
+                Vector3 far = Player.m_localPlayer.transform.position + Fwd * (leash + 12f);
+                // The foe stands NEAR the player: vanilla already drops a tamed creature's target when the TARGET is more
+                // than m_alertRange from its leader or post (MonsterAI.cs:280-291), so a far foe would pass without the leash.
+                foe = Stand("Greyling", Player.m_localPlayer.transform.position + Fwd * 8f + side * 4f);
+                if (foe == null) { Result("FAIL", "spawn the leash foe", "Greyling not found"); yield break; }
+                tame.transform.position = OnGround(far) + Vector3.up * 0.3f;
+                yield return Sec(0.3f);
+                ai.m_targetCreature = Ch(foe);
+                ai.SetAlerted(true);
+                yield return WaitFor(() => ai.m_targetCreature == null, 2f);
+                Check(waitOk, "L3 following: past the leash, the target is dropped",
+                    $"{Utils.DistanceXZ(tame.transform.position, Player.m_localPlayer.transform.position):F1} m out, leash {leash:F0} m, target {Name(ai.m_targetCreature)}");
+                bool reacquired = false;
+                float t0 = Time.realtimeSinceStartup;
+                while (Time.realtimeSinceStartup - t0 < 3f)
+                {
+                    if (Utils.DistanceXZ(tame.transform.position, Player.m_localPlayer.transform.position) > leash * 0.6f && ai.m_targetCreature != null) reacquired = true;
+                    yield return null;
+                }
+                float now = Utils.DistanceXZ(tame.transform.position, Player.m_localPlayer.transform.position);
+                Check(!reacquired, "L4 it does not pick the fight back up while still outside 60% of the leash (3 s)",
+                    $"re-acquired {reacquired}; now {now:F1} m out");
+                Check(now < leash + 12f - 1f, "L4b it is heading back to the player", $"{now:F1} m out after 3 s (started {leash + 12f:F0} m)");
+
+                // L5: told to stay (vanilla's command: no follow, patrol point here), the leash is measured from the post.
+                ai.SetFollowTarget(null);
+                tame.transform.position = OnGround(home + side * 3f) + Vector3.up * 0.3f;
+                yield return Sec(0.3f);
+                ai.SetPatrolPoint();
+                Vector3 post = tame.transform.position;
+                yield return Sec(0.5f);
+                foe.transform.position = OnGround(post + Fwd * 8f) + Vector3.up * 0.3f;   // near the post, as in L3
+                tame.transform.position = OnGround(post + Fwd * (leash + 12f)) + Vector3.up * 0.3f;
+                yield return Sec(0.3f);
+                ai.m_targetCreature = Ch(foe);
+                ai.SetAlerted(true);
+                yield return WaitFor(() => ai.m_targetCreature == null, 2f);
+                Check(waitOk, "L5 on a stay post: past the leash from the post, the target is dropped",
+                    $"{Utils.DistanceXZ(tame.transform.position, post):F1} m from the post, target {Name(ai.m_targetCreature)}");
+
+                // L6: inside the leash it fights as before (the leash must not make it passive).
+                tame.transform.position = OnGround(post + side * 2f) + Vector3.up * 0.3f;
+                yield return Sec(1.5f);
+                ai.m_targetCreature = Ch(foe);
+                yield return Sec(0.5f);
+                Check(ai.m_targetCreature != null, "L6 control: inside the leash a target is kept", $"target {Name(ai.m_targetCreature)}");
+
+                // L7: a melee Ally on a stay post keeps the prefab's idle wander pace (was forced to 0 s: a new spot every frame).
+                warrior = Stand("AllyDvergrWarrior", home - side * 3f, freeze: false);
+                if (warrior == null) { Result("FAIL", "spawn AllyDvergrWarrior", "prefab not found"); yield break; }
+                yield return Sec(3.5f);   // CombatAI.Start's 1 s and 3 s re-forces have run
+                float interval = MAI(warrior).m_randomMoveInterval;
+                Check(interval >= 5f, "L7 a melee Ally's idle wander interval is not forced to 0", $"m_randomMoveInterval {interval:F1} s");
+            }
+            finally
+            {
+                ConfigManager.FleeWhenHurtAndStuck.Value = false;
+                Gone(wild, tame, warrior, foe);
+            }
+        }
+
         // ------------------------------------------------------------------------------------------ C: the contract
 
         static int AllyCount() => Character.GetAllCharacters().Count(c => c != null && c.gameObject.name.StartsWith("AllyDvergr"));

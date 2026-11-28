@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.14
+- **Fixed: the leash never worked.** `Max Follow Leash` called the game's "set target" with nothing, which the game ignores, so a Dvergr past the leash kept chasing while the log claimed it had dropped the fight. It now really drops the target, walks back, and does not pick the fight up again until it is back inside 60% of the leash.
+- **The leash covers every tamed Dvergr.** It used to exist only on hired and bred Allies; a wild Dvergr you tamed had none.
+- **The leash also holds a Dvergr told to stay**, measured from its post. Before, a posted Dvergr chased anything near its post as far as it ran.
+- **Fixed: tamed Dvergr ran from fights for too long.** Vanilla makes a Dvergr flee while it is being hurt and has not landed an attack for 30 seconds, and it keeps fleeing until it has gone 20 seconds unhurt. Casters with long cooldowns, or a Dvergr that cannot reach its target, spent whole fights running. Tamed Dvergr now stand and fight. New server-synced setting `Flee When Hurt And Stuck` (default off) brings vanilla's behaviour back. Wild Dvergr are unchanged.
+- **Fixed: Dvergr told to stay kept shuffling about.** Melee Allies were set to pick a new idle spot every frame (casters every 5 to 10 seconds). They now keep the game's own pace: a few steps around the post every 30 seconds or so.
+- Everyone must update together: server and every client must run 1.0.14.
+- One new Harmony patch (`MonsterAI.UpdateAI`, tamed Dvergr only); a healthy log reads `[Patches] 10 applied, none failed.` No save-data changes.
+
 ## 1.0.13
 - **Fixed: you can no longer hit a Dvergr you tamed from the wild.** Your hits never landed on a hired or bred Ally, but a wild Dvergr you fed until it was tame could still be struck by your sword, arrows, bolts and area spells. The game lets a player's hit land on anything that can be "aggravated" (that is how you can strike a neutral Dvergr and set its camp off), and a tamed wild Dvergr kept that for life. Each hit then left it Frightened, with the red **!** over its head and "Kill the Norseman!" on its lips. While it is tame it can no longer be aggravated, exactly like the Allies; if it is ever untamed it goes back to normal. Covered by the existing setting `Tamed Join Player Faction` (server-synced, default on); set it off to get the 1.0.12 behaviour back.
 - **A tame Dvergr is no longer dragged into a fight you start.** Striking a wild Dvergr angers every Dvergr within 20 m. Tame ones are now left out: they are not angered and never turn on you. They may still fight the angry one, which is them defending you.
